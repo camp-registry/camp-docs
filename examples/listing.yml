@@ -1,0 +1,26 @@
+# Example .camp/listing.yml — lives in the PLUGIN's repository, not the index
+# (RFC §4.1). Authors update their listing with an ordinary commit; camp
+# ingests and hash-pins it at each tagged release. This example is what the
+# release tooling would scaffold for mod_cmi5launch.
+
+name: cmi5 Launch
+summary: Launch and track cmi5 (xAPI) content packages from within a Moodle course.
+description: |
+  cmi5 Launch lets course builders add cmi5-conformant learning packages as
+  course activities. Learner sessions are launched against your LRS, and
+  progress, completion, and scores flow back into the Moodle gradebook.
+
+  - Supports the cmi5 specification launch and auth handshake
+  - Per-AU session tracking and reporting
+  - Gradebook integration for scores and completion
+labels:
+  - fully-free
+category: activity
+screenshots:
+  - path: .camp/screenshots/course-view.png
+    caption: Activity view with AU list
+  - path: .camp/screenshots/report.png
+    caption: Session report for a learner
+links:
+  docs: https://github.com/davidpesce/moodle-mod_cmi5launch#readme
+  issues: https://github.com/davidpesce/moodle-mod_cmi5launch/issues
