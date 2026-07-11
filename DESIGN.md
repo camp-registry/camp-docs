@@ -122,6 +122,41 @@ endpoints), simple blocks come back clean, and the three seeded Tier 1
 plugins produce zero audit findings. Blocking on these signals would train
 authors to game the patterns; surfacing them trains reviewers to read them.
 
+## D11: Trusted publishing (OIDC) — design, pending GitHub infrastructure
+
+The bootstrap release flow (templates/author-release.yml) authenticates
+with a personal-access token, which is exactly the long-lived credential
+RFC §4.3 says to eliminate. The replacement, implementable only once the
+index lives on GitHub:
+
+1. The author's release workflow requests a GitHub OIDC token and uses
+   Sigstore keyless signing (Fulcio) to attest the built artifact — binding
+   the artifact hash to the *workflow identity* (repo, ref, workflow path),
+   with the attestation logged in Rekor automatically.
+2. The release PR carries the attestation bundle alongside the ledger
+   record.
+3. Index CI verifies the bundle: the certificate's repository claim must
+   equal the entry's `source`, the ref must be the release tag, and the
+   attested digest must equal `zip-sha256`. A PR from anyone whose CI
+   identity doesn't match the registered source repo fails mechanically —
+   name ownership (RFC §8) becomes cryptographically enforced per release.
+4. No secrets exist anywhere in the flow: nothing to steal from authors,
+   nothing for camp to rotate.
+
+Trade-off accepted: this ties trusted publishing to forges with OIDC
+issuers (GitHub today, GitLab has an equivalent). Authors elsewhere keep
+the PR flow with human review of provenance.
+
+## D12: Client plugin trusts TLS + published hash until the TUF client lands
+
+tool_camp v0 verifies artifacts against the SHA-256 in fetched
+packages.json — integrity against mirror/CDN tampering, but the metadata
+itself is only TLS-protected. The Phase 2 client adds TUF metadata
+verification (root pinned at plugin install time, rotation via the TUF
+root-update flow) so a compromised origin server can't serve altered
+metadata either. The repository side (`camp tuf sign`) already produces
+what that client will consume.
+
 ## Open items carried forward
 
 - Where advisories live in the index tree and their Composer projection
