@@ -252,13 +252,26 @@ Fix: the default query set now includes one targeted "moodle-<type>_ in:name"
 search per frankenstyle prefix (mod, local, block, …), each sorted by
 `updated` rather than `stars`. Prefix corpora are far smaller (most <1000,
 fully paginable) and recency-sorting surfaces exactly the new/low-star tail
-that star-sorting buries. Known residual: three prefixes (mod_ ~1.4k,
-local_ ~2.2k, block_ ~1.7k) still exceed the 1000-result cap, so their
-oldest-and-least-active tail can still be missed — a future improvement is
-date-window sharding (`pushed:<range>`) to partition those corpora below the
-cap. GitLab discovery already used prefix queries, so it was unaffected.
+that star-sorting buries. GitLab discovery already used prefix queries, so
+it was unaffected. See D19 for the >1000 prefixes.
 
-## Open items carried forward
+## D19: Date-window sharding for prefixes past the 1000-result cap
+
+The prefixes over the cap turned out to have very different tails, measured
+by the pushed-date at rank ~1000 (sorted by recent activity): mod_ cut off
+at 2018-09 and block_ at 2020-06 — their unreachable tail is genuinely
+abandoned (only ~565 of each pushed since 2024, well within reach). local_
+was the real gap: the catch-all type has 1,187 repos pushed since 2024
+alone — more than the entire reachable window — so plugins active within
+the last ~18 months were being missed.
+
+Fix: when a name query's total_count exceeds 1000, `_date_windows` bisects
+its pushed-date range (2010→today) until each window matches < 900, and the
+scanner paginates every window. Adaptive, so it self-adjusts as any prefix
+grows past the cap rather than hardcoding which types need it. Overlap at
+window boundaries is deduped by the seen-repos set. Cost is a handful of
+count requests per oversized prefix; the search API's 30/min limit is
+handled by the existing backoff.
 
 - Where advisories live in the index tree and their Composer projection
   (`composer audit` format) — RFC §5.3/§6.1.
