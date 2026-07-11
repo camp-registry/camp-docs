@@ -170,6 +170,23 @@ bucket is an outreach list — those authors are one LICENSE file away from
 eligibility. The ledger never affects installed artifacts; it only gates
 what discovery re-evaluates. `camp scan-report` summarizes it.
 
+## D14: Advisories are index objects; revocation is metadata-side, not history-side
+
+Advisories live at `index/advisories/<component>/<CAMP-YYYY-NNNN>.yml`
+(schema/advisory.schema.json): severity, Composer-syntax affected-version
+constraint, optional fix version, optional `revoke: true`, and the
+coordinated-disclosure timeline. Effects are mechanical and tested:
+`camp composer` omits revoked versions from packages.json and publishes all
+advisories in Packagist-compatible shape (security-advisories.json) so
+`composer audit` warns; `camp site` replaces the "no published advisories"
+card. The release ledger is never edited — revocation removes a version
+from installation *channels* while the archive keeps the artifact for
+forensics, exactly as RFC §5.3 specifies. The client plugin consuming
+packages.json inherits revocations automatically; per-site warnings for
+already-installed versions remain on the D12 roadmap. No real advisories
+are committed pre-launch: test fixtures only, because a plausible-looking
+advisory against a real plugin would be misinformation.
+
 ## Open items carried forward
 
 - Where advisories live in the index tree and their Composer projection
