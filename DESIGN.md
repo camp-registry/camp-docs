@@ -193,8 +193,8 @@ advisory against a real plugin would be misinformation.
   (`composer audit` format) — RFC §5.3/§6.1.
 - Listing ingestion pipeline (sanitized markdown, image re-encoding) and
   where rendered listing content is published — RFC §4.1.
-- The `.camp/listing.yml` scaffold + `.gitattributes` guidance in the
-  author-side release Action — RFC §12.
-- Whether `supported-moodle` should be computed from `$plugin->requires`
-  plus declared max rather than author-asserted (currently asserted via
-  `camp release --supported-moodle`).
+- Advisory signing: advisories are validated objects but not yet
+  individually signed; they gain signatures with the TUF rollout (they are
+  covered by `camp tuf sign` today as part of the published tree).
+- The BRANCHES table in moodleversions.py: confirm 5.1/5.2 first-release
+  version codes against upstream before they become load-bearing.
