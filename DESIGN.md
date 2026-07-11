@@ -187,6 +187,23 @@ already-installed versions remain on the D12 roadmap. No real advisories
 are committed pre-launch: test fixtures only, because a plausible-looking
 advisory against a real plugin would be misinformation.
 
+## D15: GPL-compatible permissive licenses are listed, with the license surfaced
+
+Decision (David, 2026-07-11): repos under GPL-compatible permissive
+licenses (MIT, Apache-2.0, BSD family, ISC, Unlicense, CC0, Zlib, WTFPL)
+are accepted at Tier 0 rather than rejected, with the detected SPDX id
+recorded in the entry and shown as a badge ("Apache-2.0 · GPL-compatible");
+GPL-family remains the unmarked norm. Still rejected: no detectable
+license, NOASSERTION (unclassifiable — a future content-based re-check
+could recover GPL texts GitHub can't fingerprint), and CC-BY-SA (one-way
+compatibility only). Empirical note: of ~150 MIT/Apache repos in the sweep,
+only ~10 were actual Moodle plugins (e.g. matrix-org/moodle-mod_matrix);
+the rest were downloaders, scrapers, and tooling correctly rejected for
+having no version.php. Scanner hardening from the same session: transient
+fetch errors (rate limits, 5xx) are never recorded as rejections, and
+version.php fetches use the authenticated contents API when a token is
+present — an anonymous raw-host burst previously mislabeled ~150 repos.
+
 ## Open items carried forward
 
 - Where advisories live in the index tree and their Composer projection
