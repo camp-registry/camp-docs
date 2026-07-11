@@ -227,6 +227,21 @@ Moodle Cooperation and dne-elearning/magistere groups that mirror to
 GitLab. Ledger keys are namespaced "gitlab.com/<path>" to avoid collision
 with GitHub "owner/repo" keys.
 
+## D17: License is read from the version.php header on both platforms
+
+Both scanners now fetch version.php *before* the license gate and classify
+the license from its Moodle GPL header when the platform's own detector
+finds none. Root cause: the majority of Moodle plugins ship no LICENSE file
+— the GPL grant is a per-file header comment — so GitHub reports
+`license: null` and GitLab reports none. The old license-first gate wrongly
+rejected all of them as "none detected" (danmarsden/moodle-local_recompletion
+was the reported example: no LICENSE file, default branch MOODLE_405_STABLE,
+GPL-3.0 clearly in the header). Re-running GitHub discovery with the fix
+recovered 256 real plugins (index 499 → 755) and dropped bad-license from
+502 to 56 — the remainder being genuine non-GPL or the no-LICENSE-no-header
+long tail. The "none detected" repos that were actually non-plugins
+(downloaders, scrapers) now correctly land in no-version-php instead.
+
 ## Open items carried forward
 
 - Where advisories live in the index tree and their Composer projection
