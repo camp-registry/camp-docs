@@ -242,6 +242,22 @@ recovered 256 real plugins (index 499 → 755) and dropped bad-license from
 long tail. The "none detected" repos that were actually non-plugins
 (downloaders, scrapers) now correctly land in no-version-php instead.
 
+## D18: Discovery recall — frankenstyle-prefix queries sorted by recency
+
+adamjenkins/moodle-mod_aiescape (0 stars, no topics, pushed the same day)
+was never even seen by the scanner: the GitHub queries were topic-based
+plus a broad "moodle in:name" that matches 27k+ repos, and GitHub hard-caps
+search at 1000 results — sorted by stars, a 0-star plugin is unreachable.
+Fix: the default query set now includes one targeted "moodle-<type>_ in:name"
+search per frankenstyle prefix (mod, local, block, …), each sorted by
+`updated` rather than `stars`. Prefix corpora are far smaller (most <1000,
+fully paginable) and recency-sorting surfaces exactly the new/low-star tail
+that star-sorting buries. Known residual: three prefixes (mod_ ~1.4k,
+local_ ~2.2k, block_ ~1.7k) still exceed the 1000-result cap, so their
+oldest-and-least-active tail can still be missed — a future improvement is
+date-window sharding (`pushed:<range>`) to partition those corpora below the
+cap. GitLab discovery already used prefix queries, so it was unaffected.
+
 ## Open items carried forward
 
 - Where advisories live in the index tree and their Composer projection
