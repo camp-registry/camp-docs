@@ -204,6 +204,29 @@ fetch errors (rate limits, 5xx) are never recorded as rejections, and
 version.php fetches use the authenticated contents API when a token is
 present — an anonymous raw-host burst previously mislabeled ~150 repos.
 
+## D16: GitLab discovery, and licensing from the version.php header
+
+`camp scan-gitlab` mirrors the GitHub scanner against gitlab.com's project
+API (unauthenticated works; GITLAB_TOKEN for headroom), searching the
+frankenstyle prefixes and applying the same acceptance gates, name-match
+guard, and ledger. Two GitLab-specific findings:
+
+- GitLab's license detector returns null for almost all Moodle plugins,
+  because the convention is to carry the GPL grant as a per-file header
+  comment, not a LICENSE file. So license classification reads the Moodle
+  header in the version.php we already fetch (the same text classifier used
+  for GitHub NOASSERTION recovery). This is legitimate — the in-source GPL
+  header is the authoritative license statement for Moodle code.
+- GitLab's nested groups mean namespace.path is the immediate subgroup
+  (e.g. "moodle"); the maintainer handle uses namespace.full_path
+  ("academic-moodle-cooperation/moodle") instead. The schema's gitlab
+  maintainer field permits "/".
+
+First sweep: 110 plugins added (index 389 → 499), heavy on the Academic
+Moodle Cooperation and dne-elearning/magistere groups that mirror to
+GitLab. Ledger keys are namespaced "gitlab.com/<path>" to avoid collision
+with GitHub "owner/repo" keys.
+
 ## Open items carried forward
 
 - Where advisories live in the index tree and their Composer projection
