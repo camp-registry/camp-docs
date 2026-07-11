@@ -157,6 +157,19 @@ root-update flow) so a compromised origin server can't serve altered
 metadata either. The repository side (`camp tuf sign`) already produces
 what that client will consume.
 
+## D13: Every scan evaluation is recorded, including rejections
+
+`index/discovery/scan-ledger.yml` records each repository the discovery
+scan has ever evaluated: outcome, human-readable reason (e.g. "license:
+MIT", "no parseable version.php at root of branch main"), first-seen and
+last-checked dates. Committed in the index repo, so rejection decisions
+are as auditable as listings. Uses: re-scans skip recently-checked repos
+(default 30-day recheck window, `--recheck-days`) instead of re-fetching
+them; "why isn't X listed?" has a recorded answer; and the bad-license
+bucket is an outreach list — those authors are one LICENSE file away from
+eligibility. The ledger never affects installed artifacts; it only gates
+what discovery re-evaluates. `camp scan-report` summarizes it.
+
 ## Open items carried forward
 
 - Where advisories live in the index tree and their Composer projection
