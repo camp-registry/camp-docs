@@ -273,6 +273,21 @@ window boundaries is deduped by the seen-repos set. Cost is a handful of
 count requests per oversized prefix; the search API's 30/min limit is
 handled by the existing backoff.
 
+Correction to the D18 "abandoned tail" note: that analysis measured the
+cutoff at the 1000-result boundary, but the comprehensive sweep actually ran
+with `--limit 300`, so mod_/block_ were capped at rank ~300 — far shallower
+than 1000. block_integrityadvocate (a real, maintained proctoring block)
+sat at rank 331, just past that. The reported gap was the --limit, not the
+API cap. Applying date-sharding to block_ and mod_ (previously only local_
+had it) recovered the full reachable set: block_ 385→1054, plus mod_.
+
+Robustness fix from the same run: a socket-read TimeoutError during a sweep
+was uncaught (the network helpers caught URLError/HTTPError but not a bare
+TimeoutError/OSError from resp.read()), crashing the whole scan mid-mod_.
+_request, _fetch_component, and _gitlab_request now retry network blips a
+few times with backoff and degrade to a transient/status-0 result instead
+of raising. Regression-tested.
+
 - Where advisories live in the index tree and their Composer projection
   (`composer audit` format) — RFC §5.3/§6.1.
 - Listing ingestion pipeline (sanitized markdown, image re-encoding) and
