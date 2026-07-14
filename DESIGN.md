@@ -315,6 +315,28 @@ plugin-level. Version-specific or third-party attestations (e.g. a
 professional security audit of one release) will be per-release badges,
 not tiers.
 
+## D21: Client multi-repository support — merge in PHP, bind at install
+
+RFC §6.3 (the RPM model) is implemented client-side only: the registry
+needs no changes, because "a repository" is just the static file format,
+and the merge rules are site policy. tool_camp's repos setting is an
+ordered textarea (`name|url|token=…|mintier=N`) rather than a repeated
+form: Stage 1 is an alpha admin tool, and a parseable one-line-per-repo
+format is easier to audit, copy between sites, and migrate than a custom
+UI. The old single repourl is migrated to `default|<url>` in upgrade.php.
+
+Selection is component-keyed, not package-name-keyed: different
+repositories may wrap the same component under different Composer vendor
+names, so collisions are detected via extra.camp.component. Source
+bindings (component → repo, recorded at install) live in plugin config as
+JSON; a bound component whose repository disappears from the list is
+offered from nowhere — silence, not fallback, because falling back to
+another repository is exactly the dependency-confusion move the binding
+exists to prevent. Advisory feeds union across repositories with per-repo
+failure isolation (one storefront being down must not suppress another's
+warnings). Verified with a stubbed-Moodle PHP harness covering parsing,
+priority, shadowing, binding, per-repo mintier and bearer tokens.
+
 - Where advisories live in the index tree and their Composer projection
   (`composer audit` format) — RFC §5.3/§6.1.
 - Listing ingestion pipeline (sanitized markdown, image re-encoding) and
