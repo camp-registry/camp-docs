@@ -1,0 +1,128 @@
+# Publishing your plugin to camp
+
+The developer's path from a discovered listing to verified releases, and
+what each step gets you. Steady state is deliberately minimal: **publishing
+a release means pushing a git tag** (RFC §12).
+
+> **Pre-launch note.** The "claim this plugin" links on the website and the
+> index-repository names in the release workflow are placeholders until the
+> public GitHub organization exists, and the bootstrap token flow will be
+> replaced by trusted publishing (OIDC, RFC §4.3 / DESIGN.md D11) before
+> launch. Everything else below is built and works today.
+
+## Where you probably start: your plugin is already listed
+
+The index was seeded by scanning public sources (RFC §4.4). If your plugin
+is on GitHub or GitLab under its frankenstyle name with a GPL-family
+license, it likely already has a **Tier 0 (discovered)** listing: name,
+description, license, and a link to your repository. Nothing is hosted;
+it's a search result and an invitation. If you want it gone instead,
+removal is no-questions-asked.
+
+## Step 1 — Claim the listing (Tier 0 → Tier 1)
+
+Claiming is one pull request against your entry in the index
+(`index/plugins/<type>/<component>.yml`) that adds what only an author can
+declare:
+
+- yourself under `maintainers`;
+- a `security-contact` — preferably your repository's private
+  vulnerability-reporting URL (GitHub: *Security → Advisories → Report a
+  vulnerability*; GitLab has the equivalent), else an email you actually
+  read (RFC §5.1);
+- your disclosure labels (RFC §4.7): `fully-free`, `freemium`,
+  `paid-service`, `external-account`, and/or the promotional
+  `donation-supported` / `commercial-support-available`. Labels inform,
+  they never disqualify — the requirement is that administrators know what
+  they're installing;
+- `tier: 1`.
+
+Ownership is verified mechanically at launch (the claim must come from the
+listed repository's own CI identity); during bootstrap a human checks that
+the PR author controls the source repository. Schema validation enforces
+the fields above at Tier 1+, so CI tells you if anything is missing.
+
+Tier 1 means: you're accountable, the security pipeline can reach you, and
+your listing is yours. It does **not** make the plugin installable yet —
+that takes a verified release.
+
+## Step 2 — One-time repository setup (~15 minutes)
+
+From a checkout of the index repository (`pip install ./tools` gives you
+the `camp` command):
+
+```
+# starter listing manifest + .gitattributes export-ignore defaults
+camp scaffold /path/to/your-plugin-repo
+```
+
+This writes `.camp/listing.yml` (name, summary, description, screenshots
+folder), pre-filled from your `version.php`. Edit it and commit — from
+Tier 1 up, this manifest in *your* repository is your listing content
+(RFC §4.1); you update it with ordinary commits, and it's pinned at each
+release. The `.gitattributes` defaults keep `.github/`, dotfiles and other
+dev clutter out of your distribution ZIPs.
+
+Then copy `templates/author-release.yml` from the index repository to
+`.github/workflows/camp-release.yml` in your plugin repo, set the two or
+three values at the top (component name, supported Moodle branches), and
+add the index token to your repository secrets (bootstrap only; OIDC
+replaces this).
+
+Optional but recommended — preview what registry CI will say about you:
+
+```
+camp lint-labels /path/to/your-plugin-repo   # disclosure-label heuristics
+camp audit /path/to/your-plugin-repo         # basic security lint
+```
+
+Both are warn-only, in your repo and in registry CI (DESIGN.md D10):
+findings are evidence for humans, not gates.
+
+## Step 3 — Release (Tier 1 → Tier 2, then every release after)
+
+```
+git tag v1.2.3
+git push --tags
+```
+
+That's the whole ceremony. Your workflow builds the canonical ZIP with the
+same code registry CI verifies against, computes the release record
+(version from `$plugin->release`, tagged commit, SHA-256, supported
+branches derived from `version.php`, release timestamp), and opens a PR
+appending it to your entry's ledger.
+
+Registry CI then independently: clones your repository at the tag, rebuilds
+the ZIP deterministically, confirms the hashes match, runs the standard
+static checks (moodle-plugin-ci subset, RFC §4.2) and malware scan, and
+verifies the ledger is append-only. Green means merged — minutes, not a
+review queue. Your first merged release flips the listing to **Tier 2:
+source-verified**: the website page gains its install panel, the Composer
+metadata picks you up, and sites can install your plugin — clearly
+labelled "source-verified, not human-reviewed".
+
+Two rules worth internalizing:
+
+- **Releases are immutable** (RFC §4.2). Fix mistakes by tagging a new
+  version. Never move or re-push a tag — the recorded commit no longer
+  matches, verification fails, and you get alerted.
+- **The artifact is exactly your public source.** camp never modifies your
+  code; if the ZIP contains something you didn't want shipped, the fix is
+  `.gitattributes export-ignore`, not registry-side trimming.
+
+## Afterwards — all optional
+
+- **Listing updates:** edit `.camp/listing.yml`, commit; ingested and
+  pinned at your next release.
+- **Security reports** arrive at your declared contact; the coordinated
+  disclosure process (RFC §5) handles embargo, advisory publication, and
+  automatically warning every affected site.
+- **Tier 3 (human-reviewed):** once the review board exists, request
+  promotion — two independent reviewers sign it (RFC §4.4).
+- **Dual-listing** elsewhere (Packagist, the Marketplace, a partner store)
+  needs no permission and no ceremony — camp imposes no exclusivity
+  (RFC §3).
+- **Leaving:** one final PR setting `status: moved` plus `moved-to:` where
+  you now publish (RFC §6.3). Your published versions stay archived,
+  installable, and advisory-covered; your component name stays yours if
+  you return.
