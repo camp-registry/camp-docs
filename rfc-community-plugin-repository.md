@@ -154,7 +154,7 @@ Standard coordinated disclosure: the maintainer is notified privately; an embarg
 
 Advisories are signed objects in the repository, exactly like plugin metadata. This closes the loop:
 
-- The Moodle client plugin warns every administrator running an affected version ("plugin X version Y has a published vulnerability; upgrade to Z").
+- The Moodle client plugin warns every administrator running an affected version ("plugin X version Y has a published vulnerability; upgrade to Z"). No tracking is required for this: consistent with §4.6, the registry never knows which plugins a site runs. The client periodically downloads the complete signed advisory feed — a small, anonymous static-file fetch that works against any mirror — and compares it locally against the site's own installed plugins. Matching happens on the site, where that knowledge already lives, never on the server. Composer-managed sites get the same result from `composer audit`, which performs the identical local comparison.
 - For severe cases, a signed revocation removes the affected version from installation entirely while preserving it in the archive for forensic purposes.
 - After disclosure, the full timeline becomes public.
 
