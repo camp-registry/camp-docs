@@ -1,9 +1,9 @@
 # RFC: A Community-Governed Plugin Repository for Moodle
 
 **Status:** Draft for community comment (revision 10)
-**Author(s):** [Your name / handle]
+**Author(s):** the camp project — https://github.com/camp-registry
 **Date:** July 2026
-**Feedback:** [link to discussion thread / issue tracker]
+**Feedback:** https://github.com/camp-registry/camp-docs/discussions
 
 ---
 
