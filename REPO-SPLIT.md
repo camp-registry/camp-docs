@@ -116,7 +116,7 @@ pre-launch.
 3. **camp-index**: split; drop `tools/` and `schema/`; point CI and Makefile
    at the published camp-tools; open it for PRs.
 4. **moodle-tool_camp**: extract `client/tool_camp/` to root; add its CI;
-   submit it to camp-index as its own first Tier 1 listing.
+   submit it to camp-index as its own first Tier 2 (source-verified) listing.
 5. **camp-docs** (optional): move `docs/` + the RFC.
 6. Sweep all cross-repo references (table above) and the schema `$id` URLs.
 

@@ -288,6 +288,33 @@ _request, _fetch_component, and _gitlab_request now retry network blips a
 few times with backoff and degrade to a transient/status-0 result instead
 of raising. Regression-tested.
 
+## D20: Four trust tiers — "claimed" split out, security audits are badges
+
+The original three-tier ladder (0 discovered / 1 source-verified / 2
+reviewed) conflated two events in old Tier 1: the author claiming the
+listing and the first release passing verification. A claimed listing with
+no verified release yet had nowhere to sit, and the claim funnel that
+drives outreach (RFC §4.4 Tier 0) was invisible in the data. The ladder is
+now 0 discovered / 1 claimed / 2 source-verified / 3 human-reviewed. Each
+tier answers one question: does it exist, is someone accountable, does the
+artifact match its source, have humans read the code.
+
+Consequences: the installation floor moves from tier ≥ 1 to tier ≥ 2
+(claiming alone must not make a plugin installable) — enforced in
+composer.py's package gate and defensively in the client's
+`get_installable()` via `max(2, mintier)`, which also transparently
+migrates stored mintier=1 settings from the old numbering (old 1 and new 2
+both mean source-verified). Schema: releases are forbidden below tier 2 (a
+release enters the ledger only by passing verification, which is what makes
+the plugin tier 2); labels + security-contact stay required from tier 1 up
+— that boundary was always really the claim boundary (D8).
+
+Rejected: a "security validated" tier. A volunteer review board cannot
+honestly certify security, and audits are per-version while tiers are
+plugin-level. Version-specific or third-party attestations (e.g. a
+professional security audit of one release) will be per-release badges,
+not tiers.
+
 - Where advisories live in the index tree and their Composer projection
   (`composer audit` format) — RFC §5.3/§6.1.
 - Listing ingestion pipeline (sanitized markdown, image re-encoding) and
