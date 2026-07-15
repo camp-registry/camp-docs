@@ -77,8 +77,12 @@ dev clutter out of your distribution ZIPs.
 Then copy `templates/author-release.yml` from the index repository to
 `.github/workflows/camp-release.yml` in your plugin repo, set the two or
 three values at the top (component name, supported Moodle branches), and
-add the index token to your repository secrets (bootstrap only; OIDC
-replaces this).
+add a GitHub personal access token to your repository secrets as
+`CAMP_INDEX_TOKEN` (bootstrap only; OIDC trusted publishing replaces
+this). Unless you have write access to camp-index, also fork
+camp-registry/camp-index once and uncomment the template's
+`push-to-fork` line with your fork's name — your release PRs then flow
+through your fork.
 
 Optional but recommended — preview what registry CI will say about you:
 
