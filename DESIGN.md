@@ -373,6 +373,30 @@ availability plus reproducibility — acceptable pre-launch with an empty
 ledger, and flagged here so the hosting decision is made with the
 archival requirement in view rather than as a serving-cost question only.
 
+## D23: The code checker is warn-only — style is quality, not trust
+
+Decided when the registry's first real release PR (mod_cmi5launch 1.1.0)
+was blocked by ~58 auto-fixable phpcs findings in code whose artifact had
+just been rebuilt and hash-verified perfectly. camp's promise is
+"source-verified, not human-reviewed" (RFC §4.4): style violations do not
+weaken the artifact-matches-source guarantee, and blocking on them would
+keep a large share of legitimate, widely-used community plugins out —
+the friction landing on exactly the authors the registry courts. The old
+directory's prechecker reported findings; humans decided.
+
+The floor therefore splits on what a failure *means*:
+
+- **Hard-blocking (trust):** deterministic rebuild + hash verification,
+  moved-tag detection, append-only ledger, schema validation, malware
+  scan, PHP lint (parse errors), moodle-plugin-ci validate + savepoints.
+- **Warn-only (quality):** moodle-plugin-ci phpcs, the disclosure-label
+  heuristics and security lint (already warn-only per D10).
+
+Same philosophy as D10: surfacing findings trains reviewers; blocking on
+them trains authors to game the patterns. Code-quality judgment is what
+Tier 3 human review is *for*. Findings stay visible in every release
+PR's checks, so the information is public even though it doesn't gate.
+
 - Where advisories live in the index tree and their Composer projection
   (`composer audit` format) — RFC §5.3/§6.1.
 - Listing ingestion pipeline (sanitized markdown, image re-encoding) and
