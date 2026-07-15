@@ -68,7 +68,11 @@ camp scaffold /path/to/your-plugin-repo
 ```
 
 This writes `.camp/listing.yml` (name, summary, description, screenshots
-folder), pre-filled from your `version.php`. Edit it and commit — from
+folder), pre-filled from your `version.php`. Screenshots are raster only
+(png/jpg/webp — no SVG), each entry a repo-relative `path` with an
+optional `caption`; the registry re-encodes every image at release time
+and your plugin page shows the first as the lead image with the rest as
+thumbnails. Edit it and commit — from
 Tier 1 up, this manifest in *your* repository is your listing content
 (RFC §4.1); you update it with ordinary commits, and it's pinned at each
 release. The `.gitattributes` defaults keep `.github/`, dotfiles and other
@@ -138,6 +142,13 @@ whenever your tier changes:
 Prefer shields.io's styling? The same data is served in their endpoint
 schema at `…/badge/<component>.json` for use with
 `img.shields.io/endpoint?url=…`.
+
+Verified plugins also get a **code-check badge** at
+`…/badge/<component>-checks.svg` — the registry's prechecker result for
+your newest release (errors | warnings), recomputed on every release.
+The full per-version breakdown (top rules, affected files) is public at
+`https://camp-registry.org/checks/<component>.json` and shown as chips
+on your plugin page.
 
 You can also display third-party badges **on your camp plugin page** by
 declaring endpoint-schema URLs in `.camp/listing.yml` (allowlisted hosts
