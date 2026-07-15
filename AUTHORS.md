@@ -125,6 +125,34 @@ Two rules worth internalizing:
   code; if the ZIP contains something you didn't want shipped, the fix is
   `.gitattributes export-ignore`, not registry-side trimming.
 
+## Badges
+
+Once claimed (Tier 1+), your plugin has a registry badge at
+`https://camp-registry.org/badge/<component>.svg` — self-hosted, updated
+whenever your tier changes:
+
+```markdown
+[![camp](https://camp-registry.org/badge/mod_example.svg)](https://camp-registry.org/plugin/mod_example.html)
+```
+
+Prefer shields.io's styling? The same data is served in their endpoint
+schema at `…/badge/<component>.json` for use with
+`img.shields.io/endpoint?url=…`.
+
+You can also display third-party badges **on your camp plugin page** by
+declaring endpoint-schema URLs in `.camp/listing.yml` (allowlisted hosts
+only — currently MDL Shield security grades; propose additions by PR to
+camp-tools):
+
+```yaml
+badges:
+  - endpoint: https://mdlshield.com/api/badge/mod_example
+    link: https://mdlshield.com/plugins/mod_example
+```
+
+The registry fetches the data at publish time and renders the chip
+itself, so visitors never load third-party images (RFC §4.6).
+
 ## Afterwards — all optional
 
 - **Listing updates:** edit `.camp/listing.yml`, commit; ingested and
