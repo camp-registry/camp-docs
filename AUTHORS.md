@@ -17,13 +17,19 @@ is on GitHub or GitLab under its frankenstyle name with a GPL-family
 license, it likely already has a **Tier 0 (discovered)** listing: name,
 description, license, and a link to your repository. Nothing is hosted;
 it's a search result and an invitation. If you want it gone instead,
-removal is no-questions-asked.
+removal is no-questions-asked: use the
+[removal request form](https://github.com/camp-registry/camp-index/issues/new?template=removal-request.yml)
+(also linked from your plugin's page).
 
 ## Step 1 — Claim the listing (Tier 0 → Tier 1)
 
 Claiming is one pull request against your entry in the index
-(`index/plugins/<type>/<component>.yml`) that adds what only an author can
-declare:
+(`plugins/<type>/<component>.yml` in
+[camp-index](https://github.com/camp-registry/camp-index)) that adds what
+only an author can declare. Fastest path: your plugin's page on the
+website has an **"edit your entry directly"** link that opens the file in
+GitHub's editor — GitHub forks and turns your edit into a PR
+automatically. You're adding:
 
 - yourself under `maintainers`;
 - a `security-contact` — preferably your repository's private
