@@ -337,6 +337,42 @@ failure isolation (one storefront being down must not suppress another's
 warnings). Verified with a stubbed-Moodle PHP harness covering parsing,
 priority, shadowing, binding, per-repo mintier and bearer tokens.
 
+## D22: Artifacts are a derived cache today; the archive needs real storage
+
+Where the ZIPs live, as of the Pages-era pipeline: nowhere permanent.
+`camp artifacts` rebuilds every ledger release from its tagged source on
+each publish, hash-gates against the ledger, and ships the tree in the
+Pages deployment, which the next deploy replaces. This is coherent
+because builds are deterministic (D2): source tag + ledger hash fully
+determine the bytes, so artifacts are cache, not canon. Two consequences
+accepted for now: CI rebuilds everything every publish (the materializer's
+keep-if-hash-matches optimization needs a persistent output dir), and
+there is no hosted copy of any artifact beyond the current deployment.
+
+The soft spot this leaves: the permanent-archive promise (RFC §2.2) is
+not yet backed by permanent storage. "Rebuildable from upstream" fails
+exactly when archival matters — deleted repos, suspended accounts, moved
+tags. At that point the ledger proves what the artifact *was* but nothing
+can produce it.
+
+Decision: the artifact-era hosting move is two components, not one.
+
+1. **Archive** (the commitment): append-only object storage. Each ZIP is
+   written once at verification time — as part of the release merge, not
+   the publish — and never deleted. Revoked versions stay (withdrawn from
+   distribution, preserved for forensics, RFC §5.3). This must exist by
+   (or shortly after) the first Tier 2 release: the first verified ZIP is
+   the first thing the registry has promised to keep forever.
+2. **Serving origin** (the convenience): rsync-capable host or bucket+CDN
+   that the publish step populates from the archive instead of rebuilding,
+   and that mirrors sync from (MIRRORING.md). Replaceable at any time;
+   mirrors and the archive make it non-critical.
+
+Until the archive exists, the registry's continuity rests on upstream
+availability plus reproducibility — acceptable pre-launch with an empty
+ledger, and flagged here so the hosting decision is made with the
+archival requirement in view rather than as a serving-cost question only.
+
 - Where advisories live in the index tree and their Composer projection
   (`composer audit` format) — RFC §5.3/§6.1.
 - Listing ingestion pipeline (sanitized markdown, image re-encoding) and
