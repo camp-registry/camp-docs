@@ -120,7 +120,7 @@ source-verified**: the website page gains its install panel, the Composer
 metadata picks you up, and sites can install your plugin — clearly
 labelled "source-verified, not human-reviewed".
 
-Two rules worth internalizing:
+Three rules worth internalizing:
 
 - **Releases are immutable** (RFC §4.2). Fix mistakes by tagging a new
   version. Never move or re-push a tag — the recorded commit no longer
@@ -128,6 +128,17 @@ Two rules worth internalizing:
 - **The artifact is exactly your public source.** camp never modifies your
   code; if the ZIP contains something you didn't want shipped, the fix is
   `.gitattributes export-ignore`, not registry-side trimming.
+- **The tagged tree is the complete installable plugin.** If your release
+  has a build step, commit its outputs at the tag: compiled `amd/build/`
+  modules (the usual Moodle convention), compiled CSS, and any libraries
+  your code `require`s — a committed `vendor/` directory is fine and
+  common. A packaging script that fetches a dependency while building the
+  ZIP — especially from an unpinned branch head — produces an artifact
+  nobody can reproduce or audit, the registry included: what's inside
+  depends on the day it was packed. Git submodules don't count as
+  committed (archives exclude their contents); commit the files
+  themselves. Anything your plugin needs that isn't in the tag isn't in
+  the artifact.
 
 ## Badges
 
