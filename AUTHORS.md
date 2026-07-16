@@ -185,7 +185,11 @@ itself, so visitors never load third-party images (RFC §4.6).
   camp-release.yml --ref v1.1.0`; if your copy of the template predates
   the `workflow_dispatch` trigger, add it) — never re-tag. Worth doing
   for the newest release of each Moodle branch sites still run; every
-  tag you ever pushed is history, not coverage. If a backfilled version
+  tag you ever pushed is history, not coverage. Your plugin page sorts
+  this out automatically: it features the newest release per branch
+  (the same set the install picker offers) and folds everything older
+  behind a disclosure — so deeper backfill is welcome, just invisible
+  by default. If a backfilled version
   had a known vulnerability, publish the advisory with it (RFC §5.3) so
   the version table warns instead of silently serving it. One honest
   limit: pinning happens at publication — the ledger proves the artifact
