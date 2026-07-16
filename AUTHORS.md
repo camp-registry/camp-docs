@@ -179,6 +179,18 @@ itself, so visitors never load third-party images (RFC §4.6).
 
 - **Listing updates:** edit `.camp/listing.yml`, commit; ingested and
   pinned at your next release.
+- **Backfilling older releases:** the ledger accepts releases in any
+  order — a version older than your latest lists just the same. Run your
+  release workflow at the existing tag (`gh workflow run
+  camp-release.yml --ref v1.1.0`; if your copy of the template predates
+  the `workflow_dispatch` trigger, add it) — never re-tag. Worth doing
+  for the newest release of each Moodle branch sites still run; every
+  tag you ever pushed is history, not coverage. If a backfilled version
+  had a known vulnerability, publish the advisory with it (RFC §5.3) so
+  the version table warns instead of silently serving it. One honest
+  limit: pinning happens at publication — the ledger proves the artifact
+  matches your tag from that day forward, not that the tag never moved
+  in the years before.
 - **Security reports** arrive at your declared contact; the coordinated
   disclosure process (RFC §5) handles embargo, advisory publication, and
   automatically warning every affected site.
@@ -187,6 +199,16 @@ itself, so visitors never load third-party images (RFC §4.6).
 - **Dual-listing** elsewhere (Packagist, the Marketplace, a partner store)
   needs no permission and no ceremony — camp imposes no exclusivity
   (RFC §3).
+- **Withdrawing a version:** nothing is ever deleted — that's the trust
+  model — but any version can be made uninstallable: publish an advisory
+  with `revoke: true` naming the affected versions (RFC §5.3). Revoked
+  versions drop out of the Composer metadata and the artifact tree, and
+  show struck through on your page with the advisory as the public
+  reason. The reason doesn't have to be a security hole (a data-loss bug
+  qualifies); it does have to be stated. To stop supporting an old
+  Moodle branch, no ceremony at all: just stop releasing for it — the
+  install panel offers the newest release per branch, so support ends by
+  omission.
 - **Leaving:** one final PR setting `status: moved` plus `moved-to:` where
   you now publish (RFC §6.3). Your published versions stay archived,
   installable, and advisory-covered; your component name stays yours if
