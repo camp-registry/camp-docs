@@ -397,6 +397,37 @@ them trains authors to game the patterns. Code-quality judgment is what
 Tier 3 human review is *for*. Findings stay visible in every release
 PR's checks, so the information is public even though it doesn't gate.
 
+## D24: Third-party review display is registry-level, not author-declared
+
+Decided when MDL Shield shipped a published-reviews feed (July 2026).
+Author-declared endpoint badges have survivorship bias: an author
+declares the badge after a good report and quietly doesn't after a bad
+one, so an opt-in badge can never be evidence. The registry therefore
+fetches the reviewer's published-reviews feed once per publish and
+renders the result itself on every plugin page: a trust-strip shield
+when the review covers the release camp currently offers (an
+unqualified signal or none), a grade pill per reviewed release in the
+versions table, and a Project row carrying the full detail.
+
+The display honours two boundaries that are not camp's to move:
+
+- **The reviewer's privacy model.** Publication is opt-in on their
+  side, so absence from the feed is genuinely ambiguous — unreviewed,
+  reviewed-but-private, and unknown are indistinguishable by design.
+  Absence renders as nothing; the registry never shows "not reviewed".
+- **The reviewer's subject.** Reviews cover the moodle.org
+  distribution of a version, which is not byte-identical to camp's
+  tag-built artifact (and occasionally differs meaningfully). Every
+  rendered review says so.
+
+Matching keys on frankenstyle component plus the `$plugin->version`
+integer — the identifier Moodle itself trusts; release strings drift.
+Consistent with D-series precedent (RFC §4.6), visitors load nothing
+from the reviewer's servers: the feed is fetched and sanitized at
+publish time, and camp draws its own chips. Author-declared badges for
+the same reviewer are suppressed as redundant; the declared-badge
+mechanism remains for future allowlisted hosts.
+
 - Where advisories live in the index tree and their Composer projection
   (`composer audit` format) — RFC §5.3/§6.1.
 - Listing ingestion pipeline (sanitized markdown, image re-encoding) and
