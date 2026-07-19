@@ -29,14 +29,25 @@ Clients verify content, not servers:
 
 ## Sync
 
+The published tree has two parts since the artifact archive landed
+(DESIGN.md D22): the metadata/website tree, and the plugin ZIPs in the
+append-only archive bucket (S3-compatible, public read).
+
 ```
 # hourly is plenty; timestamp metadata is valid for a day
-17 * * * *  rsync -az --delete rsync://<primary>/camp/ /srv/camp/
+17 * * * *  wget -q --mirror --no-parent -P /srv/camp https://camp-registry.org/
+43 * * * *  rclone sync :s3,provider=Other,endpoint=<b2-s3-endpoint>:camp-artifacts \
+                /srv/camp/artifacts --checksum
 ```
 
-`--delete` is safe *for distribution*: removed files are ones the registry
-deliberately withdrew from installation channels. Mirrors that also want to
-be archival keep a second, append-only copy without `--delete`.
+(Any S3-capable sync tool works for the second job; the bucket allows
+anonymous read. `rsync` remains fine for mirror-to-mirror copies.)
+
+Artifacts are append-only at the source — compliance-mode object lock;
+nothing is ever deleted from the archive, so an artifact sync never needs
+`--delete`. Metadata syncs may prune freely: files removed there are ones
+the registry deliberately withdrew from installation channels, and the
+archive still holds every deposited ZIP.
 
 Serving is then just pointing your web server's document root at the
 synced tree. No rewrites, no dynamic handlers. Set long cache lifetimes on

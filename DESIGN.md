@@ -373,6 +373,24 @@ availability plus reproducibility — acceptable pre-launch with an empty
 ledger, and flagged here so the hosting decision is made with the
 archival requirement in view rather than as a serving-cost question only.
 
+**Implemented (July 2026): Backblaze B2 with compliance-mode object
+lock, served through a Cloudflare proxy.** Immutability holds at three
+layers: deposited objects are platform-locked (default retention,
+compliance mode — nobody, the account owner included, can delete or
+overwrite during retention); the CI key is scoped to the bucket; and
+`camp deposit` never writes over an existing key, hard-failing loudly
+if an archived hash ever disagrees with the ledger. Deposits ride the
+merge-triggered publish (a release merge is the deposit moment) and
+re-verify the deterministic build against the ledger hash before
+writing; revoked releases are deposited and retained like everything
+else. The daily publish runs `camp archive-audit` — one HEAD per
+ledger release comparing stored sha256 to the ledger — so a hole in
+the archive turns the publish red within a day. Serving:
+`artifacts.camp-registry.org` proxies the bucket via Cloudflare
+(Bandwidth Alliance egress), the Composer channel and site link there,
+and the Pages deployment no longer carries ZIPs. Mirrors sync the
+bucket with any S3-capable tool (MIRRORING.md).
+
 ## D23: The code checker is warn-only — style is quality, not trust
 
 Decided when the registry's first real release PR (mod_cmi5launch 1.1.0)
