@@ -179,6 +179,12 @@ itself, so visitors never load third-party images (RFC §4.6).
 
 - **Listing updates:** edit `.camp/listing.yml`, commit; ingested and
   pinned at your next release.
+- **Your index entry is machine-maintained.** The registry's automation
+  rewrites `plugins/<type>/<component>.yml` (metrics refresh, release
+  appends), so YAML `#` comments there won't survive the next update.
+  Notes belong in your PR description, an issue, or your own
+  `.camp/listing.yml` — which is yours alone: the registry pins its
+  bytes and never rewrites it.
 - **Backfilling older releases:** the ledger accepts releases in any
   order — a version older than your latest lists just the same. Run your
   release workflow at the existing tag (`gh workflow run
