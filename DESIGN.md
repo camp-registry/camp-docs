@@ -172,14 +172,21 @@ what discovery re-evaluates. `camp scan-report` summarizes it.
 
 ## D14: Advisories are index objects; revocation is metadata-side, not history-side
 
-Advisories live at `index/advisories/<component>/<CAMP-YYYY-NNNN>.yml`
+Advisories live flat at `index/advisories/<CAMP-YYYY-NNNN>.yml`
 (schema/advisory.schema.json): severity, Composer-syntax affected-version
 constraint, optional fix version, optional `revoke: true`, and the
-coordinated-disclosure timeline. Effects are mechanical and tested:
+coordinated-disclosure timeline. The id is registry-global — it is the
+public permalink (`/advisories/<id>.html`) and the Packagist `remoteId` —
+so the filename IS the id, assigned sequentially per year by the registry
+at publication time from current main (a numbering-authority model, like
+CVE). The flat directory makes two concurrently assigned ids collide as a
+git add/add conflict on the same path rather than coexisting in
+per-component subdirectories. Effects are mechanical and tested:
 `camp composer` omits revoked versions from packages.json and publishes all
 advisories in Packagist-compatible shape (security-advisories.json) so
 `composer audit` warns; `camp site` replaces the "no published advisories"
-card. The release ledger is never edited — revocation removes a version
+card, and generates a standalone permalink page per advisory plus an
+`/advisories/` index. The release ledger is never edited — revocation removes a version
 from installation *channels* while the archive keeps the artifact for
 forensics, exactly as RFC §5.3 specifies. The client plugin consuming
 packages.json inherits revocations automatically; per-site warnings for
