@@ -59,8 +59,14 @@ that takes a verified release.
 
 ## Step 2 — One-time repository setup (~15 minutes)
 
-From a checkout of the index repository (`pip install ./tools` gives you
-the `camp` command):
+Install the `camp` command from the
+[camp-tools](https://github.com/camp-registry/camp-tools) repository:
+
+```
+pip install "git+https://github.com/camp-registry/camp-tools"
+```
+
+Then:
 
 ```
 # starter listing manifest + .gitattributes export-ignore defaults
