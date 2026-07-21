@@ -23,14 +23,7 @@ This RFC asks the community: is this worth building together, and will you help?
 
 ### 2.1 What is changing
 
-Moodle HQ has announced the Moodle Marketplace, launching mid-2026 as the replacement for the community Plugins Directory. Per HQ's own published materials:
-
-- Once the Marketplace launches, **the Plugins Directory will be turned off**, all existing listings will be migrated automatically, and all plugins will be published only in the Marketplace. There is no opt-out and no alternative official channel.
-- Paid plugins carry a **transaction fee of 25%** (20% promotional in the first year), with payments handled exclusively through Stripe Connect, which excludes developers in countries or organizational situations Stripe does not support, in a deliberately global community.
-- **Plugins that are free to download but connect to a paid service must offer that service through the Marketplace** and are treated as paid plugins. This asserts jurisdiction over the existing business models of freemium plugin authors, not merely over a new opt-in sales channel.
-- Providers must accept the **Marketplace Provider Terms of Use**, making presence in the ecosystem's only directory conditional on a commercial agreement whose terms are set, and can be changed, unilaterally.
-
-This RFC takes no position on whether any individual policy above is reasonable. Individual policies can be softened or reversed; the point is what they demonstrate.
+Moodle HQ has announced the Moodle Marketplace, launching mid-2026 as the replacement for the community Plugins Directory.
 
 ### 2.2 Why this is structural, not incidental
 
