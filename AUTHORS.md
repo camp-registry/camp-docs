@@ -4,12 +4,6 @@ The developer's path from a discovered listing to verified releases, and
 what each step gets you. Steady state is deliberately minimal: **publishing
 a release means pushing a git tag** (RFC §12).
 
-> **Pre-launch note.** The "claim this plugin" links on the website and the
-> index-repository names in the release workflow are placeholders until the
-> public GitHub organization exists, and the bootstrap token flow will be
-> replaced by trusted publishing (OIDC, RFC §4.3 / DESIGN.md D11) before
-> launch. Everything else below is built and works today.
-
 ## Where you probably start: your plugin is already listed
 
 The index was seeded by scanning public sources (RFC §4.4). If your plugin
