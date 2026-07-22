@@ -85,11 +85,14 @@ release. The `.gitattributes` defaults keep `.github/`, dotfiles and other
 dev clutter out of your distribution ZIPs.
 
 Then copy `templates/author-release.yml` from the index repository to
-`.github/workflows/camp-release.yml` in your plugin repo, set the values
-at the top (component name; the supported-Moodle override only if your
-version.php doesn't declare `$plugin->supported`), and add a GitHub
-personal access token to your repository secrets as `CAMP_INDEX_TOKEN`
-(bootstrap only; OIDC trusted publishing replaces this).
+`.github/workflows/camp-release.yml` in your plugin repo — no values to
+edit: the component name and supported-Moodle range are read from your
+version.php at the tag (`$plugin->component`; `$plugin->supported`,
+falling back to `$plugin->requires`). The two env overrides at the top
+exist for the rare plugin whose version.php can't say what it means.
+Finally, add a GitHub personal access token to your repository secrets
+as `CAMP_INDEX_TOKEN` (bootstrap only; OIDC trusted publishing replaces
+this).
 
 **The token must be a *classic* personal access token with the
 `public_repo` scope** (Settings → Developer settings → Personal access
