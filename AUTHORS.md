@@ -15,6 +15,14 @@ removal is no-questions-asked: use the
 [removal request form](https://github.com/camp-registry/camp-index/issues/new?template=removal-request.yml)
 (also linked from your plugin's page).
 
+**Naming a new plugin?** Search [camp-registry.org](https://camp-registry.org)
+for the component name first; with the moodle.org directory gone, the
+registry is the ecosystem's de facto availability check. Component names
+are a flat namespace, so two plugins cannot share one. If the name you
+want is already listed by a different project, don't publish under it:
+[open an issue](https://github.com/camp-registry/camp-index/issues) and
+the collision is resolved per [NAMESPACE.md](NAMESPACE.md).
+
 ## Step 1 — Claim the listing (Tier 0 → Tier 1)
 
 Claiming is one pull request against your entry in the index
