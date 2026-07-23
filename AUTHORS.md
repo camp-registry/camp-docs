@@ -67,57 +67,67 @@ that takes a verified release.
 
 ## Step 2 — One-time repository setup (~15 minutes)
 
-Install the `camp` command from the
-[camp-tools](https://github.com/camp-registry/camp-tools) repository:
+Nothing in this step requires a local toolchain: everything the
+pipeline runs happens on GitHub's servers, so your own operating
+system (Windows included) never matters. Local Python is an optional
+convenience, not a requirement.
 
-```
-pip install "git+https://github.com/camp-registry/camp-tools"
-```
+**1. Fork the index.** Fork
+[camp-registry/camp-index](https://github.com/camp-registry/camp-index)
+once, keeping the name `camp-index`. Everyone publishes through a
+fork, index maintainers included; your release PRs flow from it, and
+you never need to keep it in sync.
 
-Then:
+**2. Add `.camp/listing.yml` to your plugin repository.** Two ways:
 
-```
-# starter listing manifest + .gitattributes export-ignore defaults
-camp scaffold /path/to/your-plugin-repo
-```
+- *By hand (no tools needed):* copy the
+  [annotated example](https://github.com/camp-registry/camp-docs/blob/main/examples/listing.yml)
+  into `.camp/listing.yml` and edit the obvious fields.
+- *With the camp tool* (any OS with Python; `pip` is Python's
+  installer, not a Linux thing):
+  `pip install "git+https://github.com/camp-registry/camp-tools"`,
+  then `camp scaffold /path/to/your-plugin-repo`, which pre-fills the
+  manifest from your version.php and writes `.gitattributes`
+  export-ignore defaults that keep `.github/`, dotfiles and other dev
+  clutter out of your distribution ZIPs.
 
-This writes `.camp/listing.yml` (name, summary, description, screenshots
-folder), pre-filled from your `version.php`. Screenshots are raster only
-(png/jpg/webp — no SVG), each entry a repo-relative `path` with an
-optional `caption`; the registry re-encodes every image at release time
-and your plugin page shows the first as the lead image with the rest as
-thumbnails. Edit it and commit — from
-Tier 1 up, this manifest in *your* repository is your listing content
-(RFC §4.1); you update it with ordinary commits, and it's pinned at each
-release. The `.gitattributes` defaults keep `.github/`, dotfiles and other
-dev clutter out of your distribution ZIPs.
+Screenshots are raster only (png/jpg/webp, no SVG), each entry a
+repo-relative `path` with an optional `caption`; the registry
+re-encodes every image at release time and your plugin page shows the
+first as the lead image. From Tier 1 up this manifest in *your*
+repository is your listing content (RFC §4.1): you update it with
+ordinary commits, and it is pinned at each release.
 
-Then copy `templates/author-release.yml` from the index repository to
-`.github/workflows/camp-release.yml` in your plugin repo — no values to
-edit: the component name and supported-Moodle range are read from your
-version.php at the tag (`$plugin->component`; `$plugin->supported`,
-falling back to `$plugin->requires`). The two env overrides at the top
-exist for the rare plugin whose version.php can't say what it means.
-Finally, add a GitHub personal access token to your repository secrets
-as `CAMP_INDEX_TOKEN` (bootstrap only; OIDC trusted publishing replaces
-this).
+**3. Copy the release workflow.** Copy `templates/author-release.yml`
+from the index repository to `.github/workflows/camp-release.yml` in
+your plugin repo. No values to edit: the component name and
+supported-Moodle range are read from your version.php at the tag, and
+the workflow pushes to the fork named `camp-index` under the same
+account as your plugin repo. The env overrides at the top exist for
+the rare plugin whose version.php can't say what it means.
 
-**The token must be a *classic* personal access token with the
-`public_repo` scope** (Settings → Developer settings → Personal access
-tokens → Tokens (classic)). A fine-grained token will not work: it can
-only be scoped to repositories you own, which covers pushing the release
-branch to your fork but not the final step — opening the pull request
-against camp-registry/camp-index — so the workflow fails only at the
-very end with a 403. `public_repo` is the whole requirement; no
-`workflow` or private-repo scope is needed. Give the token an expiry —
-it's a bootstrap mechanism, not a permanent credential.
+**4. Add the token.** Add a GitHub personal access token to your
+plugin repository's secrets as `CAMP_INDEX_TOKEN`. **It must be a
+*classic* token with the `public_repo` scope** (Settings → Developer
+settings → Personal access tokens → Tokens (classic)). A fine-grained
+token will not work: it cannot be scoped to the camp-registry
+organization, so the workflow fails only at the very end, opening the
+PR, with a 403. `public_repo` is the whole requirement; no `workflow`
+or private-repo scope is needed. Give the token an expiry.
 
-Unless you have write access to camp-index, also fork
-camp-registry/camp-index once and uncomment the template's
-`push-to-fork` line with your fork's name — your release PRs then flow
-through your fork.
+*What this token can and cannot do:* `public_repo` lets it act on
+public repositories you can already act on, nothing more; it grants no
+access to private repositories and no special rights on camp
+(release PRs are independently verified and merged by humans
+regardless of who opens them). It exists only because GitHub gives a
+workflow no built-in way to open a PR on another repository. It is a
+bootstrap mechanism: registry-side publishing (an hourly tag watcher
+plus an instant "publish release" request path on camp-index) is
+replacing it, after which this whole step disappears and pushing a
+tag is genuinely the entire ceremony.
 
-Optional but recommended — preview what registry CI will say about you:
+Optional, and only if you installed the camp tool: preview what
+registry CI will say about you.
 
 ```
 camp lint-labels /path/to/your-plugin-repo   # disclosure-label heuristics
