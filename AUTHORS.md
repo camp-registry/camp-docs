@@ -15,6 +15,12 @@ removal is no-questions-asked: use the
 [removal request form](https://github.com/camp-registry/camp-index/issues/new?template=removal-request.yml)
 (also linked from your plugin's page).
 
+**Plugin missing entirely?** Discovery skips repositories GitHub flags
+as forks, which hides legitimate plugins whose canonical home began as
+a fork of an abandoned upstream (common after a maintainer takeover).
+If that's yours, [open an issue](https://github.com/camp-registry/camp-index/issues)
+naming the repository and the registry will seed it directly.
+
 **Naming a new plugin?** Search [camp-registry.org](https://camp-registry.org)
 for the component name first; with the moodle.org directory gone, the
 registry is the ecosystem's de facto availability check. Component names
