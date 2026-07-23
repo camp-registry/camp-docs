@@ -121,10 +121,9 @@ access to private repositories and no special rights on camp
 (release PRs are independently verified and merged by humans
 regardless of who opens them). It exists only because GitHub gives a
 workflow no built-in way to open a PR on another repository. It is a
-bootstrap mechanism: registry-side publishing (an hourly tag watcher
-plus an instant "publish release" request path on camp-index) is
-replacing it, after which this whole step disappears and pushing a
-tag is genuinely the entire ceremony.
+bootstrap mechanism: a registry-side publishing design that would
+retire it is under discussion
+([camp-index#66](https://github.com/camp-registry/camp-index/issues/66)).
 
 Optional, and only if you installed the camp tool: preview what
 registry CI will say about you.
