@@ -101,7 +101,7 @@ first as the lead image. From Tier 1 up this manifest in *your*
 repository is your listing content (RFC §4.1): you update it with
 ordinary commits, and it is pinned at each release.
 
-**3. Copy the release workflow.** Copy `templates/author-release.yml`
+**3. Copy the release workflow.** Copy <a href="https://github.com/camp-registry/camp-index/blob/main/templates/author-release.yml"><code>templates/author-release.yml</code></a>
 from the index repository to `.github/workflows/camp-release.yml` in
 your plugin repo. No values to edit: the component name and
 supported-Moodle range are read from your version.php at the tag, and
