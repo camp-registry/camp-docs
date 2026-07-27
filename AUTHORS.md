@@ -260,6 +260,16 @@ itself, so visitors never load third-party images (RFC §4.6).
   Moodle branch, no ceremony at all: just stop releasing for it — the
   install panel offers the newest release per branch, so support ends by
   omission.
+- **Finished with a plugin?** Archive the repository on GitHub/GitLab
+  and you're done: the registry observes the archived flag and your
+  plugin page shows the "Archived upstream" health phrase
+  automatically (health is observed, never self-declared, which is
+  what makes it trustworthy; there is no status value to set).
+  Published releases stay installable and advisory-covered, and
+  claiming an archived plugin works exactly like claiming any other,
+  which is worth doing so a human stays reachable for it. If you want
+  the listing gone instead, the removal request form applies as
+  always.
 - **Leaving:** one final PR setting `status: moved` plus `moved-to:` where
   you now publish (RFC §6.3). Your published versions stay archived,
   installable, and advisory-covered; your component name stays yours if
