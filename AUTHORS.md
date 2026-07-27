@@ -241,7 +241,13 @@ itself, so visitors never load third-party images (RFC §4.6).
   the version table warns instead of silently serving it. One honest
   limit: pinning happens at publication — the ledger proves the artifact
   matches your tag from that day forward, not that the tag never moved
-  in the years before.
+  in the years before. For now, release one version at a time: two
+  release PRs open at once edit the same entry lines, so the second
+  conflicts. If that happens, re-run the workflow at the affected tag
+  and its PR updates in place. The one-at-a-time requirement may not
+  last: the publishing rework under discussion in
+  [camp-index#66](https://github.com/camp-registry/camp-index/issues/66)
+  is expected to fold concurrent releases together automatically.
 - **Security reports** arrive at your declared contact; the coordinated
   disclosure process (RFC §5) handles embargo, advisory publication, and
   automatically warning every affected site.
