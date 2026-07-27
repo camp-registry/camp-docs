@@ -229,6 +229,7 @@ We prefer to name the hard problems ourselves:
 | Economic gravity pulls authors to the paid Marketplace | Be the better home for free plugins: instant CI publishing vs. review queues, security pipeline, archival permanence; remain commerce-neutral |
 | Reviewer/triage volunteer bandwidth (the failure mode of most web-of-trust systems) | Automation as the trust floor; human review as a scarce, targeted resource; recruit institutionally, not just individually |
 | Trust-infrastructure key mismanagement | TUF threshold design, offline roots, documented ceremonies, and an external audit of the signing path before launch |
+| Catalog replication and enclosure (a storefront or fork replicates the index, enriches it privately, and diverges) | The index database is licensed ODbL: replication and produced works (storefronts, install tooling) are free with attribution, while improvements to the database itself must be shared back. Advisories are CC BY 4.0 so security warnings propagate without friction. Contributions are accepted under CC0 (camp-index CONTRIBUTING.md), so the project can always relicense as one party. |
 
 ## 11. Roadmap
 

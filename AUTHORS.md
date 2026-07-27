@@ -68,6 +68,12 @@ Tier 1 means: you're accountable, the security pipeline can reach you, and
 your listing is yours. It does **not** make the plugin installable yet —
 that takes a verified release.
 
+One licensing note: contributions to the index (your claim PR included)
+are accepted under CC0, and the assembled database is published under
+ODbL with advisories under CC BY 4.0; see LICENSE-DATA and
+CONTRIBUTING.md in camp-index. Your plugin's own code and listing
+content stay under your plugin's license, always.
+
 ## Step 2 — One-time repository setup (~15 minutes)
 
 Nothing in this step requires a local toolchain: everything the
