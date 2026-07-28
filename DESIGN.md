@@ -122,30 +122,49 @@ endpoints), simple blocks come back clean, and the three seeded Tier 1
 plugins produce zero audit findings. Blocking on these signals would train
 authors to game the patterns; surfacing them trains reviewers to read them.
 
-## D11: Trusted publishing (OIDC) — design, pending GitHub infrastructure
+## D11: Trusted publishing (OIDC) — implemented July 2026 as a token exchange
 
-The bootstrap release flow (templates/author-release.yml) authenticates
-with a personal-access token, which is exactly the long-lived credential
-RFC §4.3 says to eliminate. The replacement, implementable only once the
-index lives on GitHub:
+The bootstrap release flow authenticated with a personal-access token,
+exactly the long-lived credential RFC §4.3 says to eliminate. The
+implemented replacement (decided and recorded on camp-index#66; service
+code public at camp-registry/camp-publisher; endpoint
+publish.camp-registry.org):
 
-1. The author's release workflow requests a GitHub OIDC token and uses
-   Sigstore keyless signing (Fulcio) to attest the built artifact — binding
-   the artifact hash to the *workflow identity* (repo, ref, workflow path),
-   with the attestation logged in Rekor automatically.
-2. The release PR carries the attestation bundle alongside the ledger
-   record.
-3. Index CI verifies the bundle: the certificate's repository claim must
-   equal the entry's `source`, the ref must be the release tag, and the
-   attested digest must equal `zip-sha256`. A PR from anyone whose CI
-   identity doesn't match the registered source repo fails mechanically —
-   name ownership (RFC §8) becomes cryptographically enforced per release.
-4. No secrets exist anywhere in the flow: nothing to steal from authors,
-   nothing for camp to rotate.
+1. The author's release workflow builds the release record with camp
+   tools at the tag, requests an OIDC identity token from its CI host
+   with audience `camp-publish`, and POSTs both to the publish service.
+   `id-token: write` grants only the ability to request that identity
+   statement; the author's workflow holds no credential at any point.
+2. The service — a stateless function holding the flow's only
+   credential, a GitHub App that can open release PRs on camp-index and
+   nothing else — verifies the token against the provider's published
+   keys and checks the authorization fact recorded at claim time: the
+   repository the token was minted in is the entry's listed source (see
+   D26 for the identity rules). It appends exactly one release record to
+   the entry on a rolling `release-request/<component>` branch based on
+   current main (a second release appends to the open PR — the fix
+   promised on camp-index#13), carries the tier 1 → 2 transition on a
+   first release, and opens or updates the PR. The maintainer is the git
+   author of the release commit; the App is the committer, so the
+   release act stays attributed to its author.
+3. Unchanged from every other path: index CI independently rebuilds the
+   artifact from the public tag and verifies the recorded hashes, and a
+   human merges. The record is untrusted input regardless of transport.
+4. The token flow is a supported alternative, not deprecated: the path
+   for hosts without CI identity tokens, the outage answer, and a valid
+   preference (templates/author-release-pat.yml).
 
-Trade-off accepted: this ties trusted publishing to forges with OIDC
-issuers (GitHub today, GitLab has an equivalent). Authors elsewhere keep
-the PR flow with human review of provenance.
+The original sketch here bound the artifact hash to the workflow
+identity via Sigstore keyless signing (Fulcio certificate, Rekor log).
+That attestation layer is deferred, not rejected: it composes on top of
+the shipped flow and belongs with the TUF implementation work, not with
+transport authorization. First release through the shipped flow:
+mod_tincanlaunch v1.64 (camp-index#138).
+
+Trade-off accepted, unchanged: full automation is available on forges
+with OIDC issuers (github.com and gitlab.com adapters shipped;
+self-hosted instances excluded because an instance operator controls
+what its tokens claim). Authors elsewhere keep the token flow.
 
 ## D12: Client plugin trusts TLS + published hash until the TUF client lands
 
@@ -462,3 +481,63 @@ mechanism remains for future allowlisted hosts.
   covered by `camp tuf sign` today as part of the published tree).
 - The BRANCHES table in moodleversions.py: confirm 5.1/5.2 first-release
   version codes against upstream before they become load-bearing.
+
+## D25: Discovery is not reservation — names are earned by publication
+
+The seeding scans list thousands of plugins whose authors have never
+heard of camp (Tier 0). A listing created by discovery asserts only
+"this code exists at this source"; it reserves nothing for anyone. Name
+ownership in the registry sense is earned by the acts NAMESPACE.md
+enumerates: claiming, publishing verified releases, and answering for
+the entry. Consequences the registry lives by:
+
+- A Tier 0 listing yields to a claim from the code's actual maintainer,
+  wherever the scanner happened to find a copy first (the repoint
+  pattern; the first-come language of RFC §8 applies to *claimed*
+  names, not scanner arrivals).
+- Two honest plugins colliding on one component name is a namespace
+  dispute (NAMESPACE.md, PEP-541-style: public issue, board decides),
+  not a race won at scan time.
+- Removal at a maintainer's request releases the *name* while the
+  opt-out marker sticks to the *repository* — the same name remains
+  seedable from a different repo, and the same repo is never re-listed.
+
+Operative policy: NAMESPACE.md (public since July 22, 2026; first
+exercised the same week). This entry records the principle so the RFC §8
+summary is read through it.
+
+## D26: Publishing identity is the immutable repo id; renames stop softly
+
+The publish service (D11) must answer "is this CI job the listed
+source?" The token's repository *name* claim cannot be that answer
+alone: names are reusable — rename or delete a repository and anyone
+can re-register the old name, whose workflows then mint valid tokens
+carrying exactly the name the entry lists. The rules shipped:
+
+- Entries record `source-repo-id`, the platform's permanent numeric id
+  (GitHub repository id / GitLab project id), captured at claim time
+  and re-resolved on every source repoint (`camp fill-repo-ids`;
+  refresh-metrics keeps it current). The id survives renames, owner
+  renames, and transfers, so resurrection of a freed name fails
+  mechanically against it.
+- Id match with a name mismatch means the repository was renamed or
+  transferred: the service refuses with a soft stop pointing at a
+  listing repoint. A repoint is a reviewed change, so every ownership
+  change passes exactly one human checkpoint, then publishing resumes.
+  Consensual handovers keep working; silent ones become visible.
+- A handover without a transfer (fork, fresh repository) has a new id
+  and is refused outright — mechanically indistinguishable from a copy,
+  and routed to the claim/repoint process where the board judges
+  successor versus copy (D25, NAMESPACE.md).
+- Provider binding: the token verifier is selected by issuer, and the
+  issuer's host must equal the entry's source host — a token from one
+  provider can never publish an entry sourced on another, which also
+  scopes ids so they cannot collide across platforms.
+- Entries claimed before the field existed fall back to the name match
+  until backfilled (the July 2026 backfill covered all claimed entries,
+  so the fallback is vestigial).
+
+The window this closes was real: GitHub reuses names immediately, and
+the registry's rename detection runs on a rolling cadence, not at
+publish time. PyPI's trusted publishing hardened against the same
+resurrection class.

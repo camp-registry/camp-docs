@@ -112,6 +112,8 @@ The published repository is a plain file tree: plugin ZIPs, metadata, signatures
 - Clients verify signatures, so a mirror does not need to be trusted: a malicious or compromised mirror can at worst serve stale or missing files, never tampered ones.
 - We will seek 3–5 institutional mirror operators (universities, Moodle partners) in different countries at launch.
 
+One deliberate, narrow exception exists on the *publication* path, never the download path: trusted publishing (§4.3) runs through a single stateless verification service that exchanges an author's CI identity token for a release pull request (DESIGN.md D11). It stores nothing, serves no reads, and is not needed to consume, mirror, or fork the repository; if it is ever unavailable, publishing degrades to the documented token-based alternative while distribution is unaffected. The exit guarantee (§9) is untouched: the service's code is public and its function is replaceable from the format alone.
+
 ### 4.6 Privacy by design
 
 An update check inherently reveals which plugins a site runs; collectively, that is a map of the security posture of thousands of institutions. The project commits to data minimization: no per-site accounts or registration, no retention of installed-plugin lists, aggregate statistics only, and a published privacy policy stating exactly what is logged and for how long. Mirrors see only anonymous file downloads.
@@ -203,7 +205,7 @@ Plugins listed only in this repository lose access to AMOS, Moodle's official tr
 ## 8. Naming, trademark, and namespace policy
 
 - **Naming.** "Moodle" is a registered trademark of Moodle Pty Ltd. The project will adopt a distinct name, using "for Moodle" only descriptively (as in "a plugin repository for Moodle"), and will obtain legal review of the name and domain before public launch, through the fiscal host where possible. Name proposals are invited in the discussion thread.
-- **Component namespace.** Moodle plugins are identified by component names ("frankenstyle", e.g. `mod_attendance`), and the official directory has historically acted as the name registry. To protect users from collisions and typosquatting, this repository's policy is: (1) any component name registered in the official directory maps only to that plugin's canonical source; (2) new names are first-come but subject to an automated similarity check and human sign-off; (3) disputes are resolved publicly by the governance body.
+- **Component namespace.** Moodle plugins are identified by component names ("frankenstyle", e.g. `mod_attendance`), and the official directory has historically acted as the name registry. To protect users from collisions and typosquatting, this repository's policy is: (1) any component name registered in the official directory maps only to that plugin's canonical source; (2) new names are first-come but subject to an automated similarity check and human sign-off; (3) disputes are resolved publicly by the governance body. The operative policy, including how discovery-era listings relate to name ownership, is [NAMESPACE.md](NAMESPACE.md) (see also DESIGN.md D25).
 
 ## 9. Governance
 
