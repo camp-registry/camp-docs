@@ -74,20 +74,15 @@ ODbL with advisories under CC BY 4.0; see LICENSE-DATA and
 CONTRIBUTING.md in camp-index. Your plugin's own code and listing
 content stay under your plugin's license, always.
 
-## Step 2 — One-time repository setup (~15 minutes)
+## Step 2 — One-time repository setup (~5 minutes)
 
 Nothing in this step requires a local toolchain: everything the
-pipeline runs happens on GitHub's servers, so your own operating
+pipeline runs happens on your host's CI servers, so your own operating
 system (Windows included) never matters. Local Python is an optional
-convenience, not a requirement.
+convenience, not a requirement. There is also nothing to create or
+guard: no fork, no access token, no secrets.
 
-**1. Fork the index.** Fork
-[camp-registry/camp-index](https://github.com/camp-registry/camp-index)
-once, keeping the name `camp-index`. Everyone publishes through a
-fork, index maintainers included; your release PRs flow from it, and
-you never need to keep it in sync.
-
-**2. Add `.camp/listing.yml` to your plugin repository.** Two ways:
+**1. Add `.camp/listing.yml` to your plugin repository.** Two ways:
 
 - *By hand (no tools needed):* copy the
   [annotated example](https://github.com/camp-registry/camp-docs/blob/main/examples/listing.yml)
@@ -107,31 +102,40 @@ first as the lead image. From Tier 1 up this manifest in *your*
 repository is your listing content (RFC §4.1): you update it with
 ordinary commits, and it is pinned at each release.
 
-**3. Copy the release workflow.** Copy `templates/author-release.yml`
-from the index repository to `.github/workflows/camp-release.yml` in
-your plugin repo. No values to edit: the component name and
-supported-Moodle range are read from your version.php at the tag, and
-the workflow pushes to the fork named `camp-index` under the same
-account as your plugin repo. The env overrides at the top exist for
-the rare plugin whose version.php can't say what it means.
+**2. Copy the release workflow.** On GitHub, copy
+`templates/author-release.yml` from the index repository to
+`.github/workflows/camp-release.yml` in your plugin repo. On
+gitlab.com, copy `templates/author-release-gitlab.yml` into your
+`.gitlab-ci.yml` instead; GitLab-hosted plugins need no GitHub account
+at all. No values to edit either way: the component name and
+supported-Moodle range are read from your version.php at the tag. The
+env overrides at the top exist for the rare plugin whose version.php
+can't say what it means.
 
-**4. Add the token.** Add a GitHub personal access token to your
-plugin repository's secrets as `CAMP_INDEX_TOKEN`. **It must be a
-*classic* token with the `public_repo` scope** (Settings → Developer
-settings → Personal access tokens → Tokens (classic)). A fine-grained
-token will not work: it cannot be scoped to the camp-registry
-organization, so the workflow fails only at the very end, opening the
-PR, with a 403. `public_repo` is the whole requirement; no `workflow`
-or private-repo scope is needed. Give the token an expiry.
+*How publishing is authorized:* when your workflow runs at a tag, your
+CI host hands it a short-lived signed statement of identity (an OIDC
+token: "this job is running in repository X, at tag Y"). The camp
+publish service verifies that statement and checks one fact recorded
+when you claimed your listing: that your repository is the entry's
+listed source, by permanent repository id. Then the service, not your
+workflow, opens the release PR. The `id-token: write` permission in
+the workflow grants exactly the ability to request that statement; it
+writes nothing to your repository. No credential exists anywhere in
+this flow, so there is nothing to leak, rotate, or expire. If you
+rename your repository or transfer it to a new owner, publishing
+pauses with a pointer to update your listing (a reviewed change), then
+resumes.
 
-*What this token can and cannot do:* `public_repo` lets it act on
-public repositories you can already act on, nothing more; it grants no
-access to private repositories and no special rights on camp
-(release PRs are independently verified and merged by humans
-regardless of who opens them). It exists only because GitHub gives a
-workflow no built-in way to open a PR on another repository. It is a
-bootstrap mechanism: a registry-side publishing design that would
-retire it is under discussion
+*Prefer holding a token yourself, or hosting somewhere without CI
+identity tokens?* The original personal-access-token flow remains a
+supported alternative, unchanged:
+`templates/author-release-pat.yml`, plus a fork of camp-index and a
+classic `public_repo`-scoped token as `CAMP_INDEX_TOKEN` in your repo
+secrets (fine-grained tokens cannot be scoped to the camp-registry
+organization). It is also the fallback if the publish service is ever
+unavailable. Both flows end at the same place: a release PR that camp
+CI independently rebuilds and verifies from the public tag before a
+human merges
 ([camp-index#66](https://github.com/camp-registry/camp-index/issues/66)).
 
 Optional, and only if you installed the camp tool: preview what
@@ -152,11 +156,14 @@ git tag v1.2.3
 git push --tags
 ```
 
-That's the whole ceremony. Your workflow builds the canonical ZIP with the
-same code registry CI verifies against, computes the release record
-(version from `$plugin->release`, tagged commit, SHA-256, supported
-branches derived from `version.php`, release timestamp), and opens a PR
-appending it to your entry's ledger.
+That's the whole ceremony, on GitHub and GitLab alike. Your workflow
+builds the canonical ZIP with the same code registry CI verifies
+against and computes the release record (version from
+`$plugin->release`, tagged commit, SHA-256, supported branches derived
+from `version.php`, release timestamp), and a PR appending it to your
+entry's ledger opens on the index: the publish service opens it in the
+tokenless flow, your own workflow does in the PAT flow. Either way the
+PR names you as the author of the release commit.
 
 Registry CI then independently: clones your repository at the tag, rebuilds
 the ZIP deterministically, confirms the hashes match, runs the standard
@@ -247,13 +254,13 @@ itself, so visitors never load third-party images (RFC §4.6).
   the version table warns instead of silently serving it. One honest
   limit: pinning happens at publication — the ledger proves the artifact
   matches your tag from that day forward, not that the tag never moved
-  in the years before. For now, release one version at a time: two
-  release PRs open at once edit the same entry lines, so the second
-  conflicts. If that happens, re-run the workflow at the affected tag
-  and its PR updates in place. The one-at-a-time requirement may not
-  last: the publishing rework under discussion in
-  [camp-index#66](https://github.com/camp-registry/camp-index/issues/66)
-  is expected to fold concurrent releases together automatically.
+  in the years before. In the tokenless flow, releases published while
+  an earlier one is still awaiting merge simply append to the same open
+  PR (one rolling release PR per plugin), so backfilling several
+  versions in a row just works. In the PAT flow, release one version at
+  a time: two release PRs open at once edit the same entry lines, so
+  the second conflicts; if that happens, re-run the workflow at the
+  affected tag and its PR updates in place.
 - **Security reports** arrive at your declared contact; the coordinated
   disclosure process (RFC §5) handles embargo, advisory publication, and
   automatically warning every affected site.
