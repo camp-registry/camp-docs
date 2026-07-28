@@ -103,14 +103,15 @@ repository is your listing content (RFC §4.1): you update it with
 ordinary commits, and it is pinned at each release.
 
 **2. Copy the release workflow.** On GitHub, copy
-`templates/author-release.yml` from the index repository to
-`.github/workflows/camp-release.yml` in your plugin repo. On
-gitlab.com, copy `templates/author-release-gitlab.yml` into your
-`.gitlab-ci.yml` instead; GitLab-hosted plugins need no GitHub account
-at all. No values to edit either way: the component name and
-supported-Moodle range are read from your version.php at the tag. The
-env overrides at the top exist for the rare plugin whose version.php
-can't say what it means.
+[`templates/author-release.yml`](https://github.com/camp-registry/camp-index/blob/main/templates/author-release.yml)
+from the index repository to `.github/workflows/camp-release.yml` in
+your plugin repo. On gitlab.com, copy
+[`templates/author-release-gitlab.yml`](https://github.com/camp-registry/camp-index/blob/main/templates/author-release-gitlab.yml)
+into your `.gitlab-ci.yml` instead; GitLab-hosted plugins need no
+GitHub account at all. No values to edit either way: the component
+name and supported-Moodle range are read from your version.php at the
+tag. The env overrides at the top exist for the rare plugin whose
+version.php can't say what it means.
 
 *How publishing is authorized:* when your workflow runs at a tag, your
 CI host hands it a short-lived signed statement of identity (an OIDC
@@ -129,10 +130,10 @@ resumes.
 *Prefer holding a token yourself, or hosting somewhere without CI
 identity tokens?* The original personal-access-token flow remains a
 supported alternative, unchanged:
-`templates/author-release-pat.yml`, plus a fork of camp-index and a
-classic `public_repo`-scoped token as `CAMP_INDEX_TOKEN` in your repo
-secrets (fine-grained tokens cannot be scoped to the camp-registry
-organization). It is also the fallback if the publish service is ever
+[`templates/author-release-pat.yml`](https://github.com/camp-registry/camp-index/blob/main/templates/author-release-pat.yml),
+plus a fork of camp-index and a classic `public_repo`-scoped token as
+`CAMP_INDEX_TOKEN` in your repo secrets (fine-grained tokens cannot
+be scoped to the camp-registry organization). It is also the fallback if the publish service is ever
 unavailable. Both flows end at the same place: a release PR that camp
 CI independently rebuilds and verifies from the public tag before a
 human merges
