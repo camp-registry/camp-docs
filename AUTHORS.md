@@ -275,7 +275,9 @@ itself, so visitors never load third-party images (RFC §4.6).
   with `revoke: true` naming the affected versions (RFC §5.3). Revoked
   versions drop out of the Composer metadata and the artifact tree, and
   show struck through on your page with the advisory as the public
-  reason. The reason doesn't have to be a security hole (a data-loss bug
+  reason. A withdrawn version name is retired for good: revocation
+  follows the version name, so ship the replacement as a new version
+  rather than republishing the old one. The reason doesn't have to be a security hole (a data-loss bug
   qualifies); it does have to be stated. To stop supporting an old
   Moodle branch, no ceremony at all: just stop releasing for it — the
   install panel offers the newest release per branch, so support ends by
