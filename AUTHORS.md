@@ -30,7 +30,8 @@ registry is the ecosystem's de facto availability check. Component names
 are a flat namespace, so two plugins cannot share one. If the name you
 want is already listed by a different project, don't publish under it:
 [open an issue](https://github.com/camp-registry/camp-index/issues) and
-the collision is resolved per [NAMESPACE.md](NAMESPACE.md).
+the collision is resolved per
+[NAMESPACE.md](https://github.com/camp-registry/camp-docs/blob/main/NAMESPACE.md).
 
 ## Step 1 — Claim the listing (Tier 0 → Tier 1)
 
