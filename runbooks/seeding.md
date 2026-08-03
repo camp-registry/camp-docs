@@ -102,3 +102,21 @@ invites a fresh request after the push.
 - tool_imageoptimize / tool_imageoptimizer (#84 area, #87): seeding a
   successor and removing the stale predecessor are separate requests,
   each verified on its own.
+
+## Fork-flagged repositories
+
+Discovery excludes GitHub-flagged forks by design (a noise filter
+against listing thousands of unmodified copies), so a targeted scan
+cannot seed one, and the seed-request path will hit this for authors
+whose plugin began life as a fork. The exclusion is a discovery
+heuristic, not an admission rule. A fork qualifies for a hand-seeded
+registry entry when the picture shows a distinct plugin rather than a
+copy: it declares its own component name, it has meaningfully diverged
+from the parent, it is maintained, and ideally the old directory
+listed the component to it. Hand-seeding means writing the entry with
+data observed from the platform API at seed time, exactly as the
+scanner records it, never copying author-supplied values; the commit
+documents the evidence. Precedent: block_rate (camp-index#195), a
+diverged, directory-listed fork of moodleou's block_rate_course.
+Weaker pictures (undiverged forks, no directory history, component
+unchanged from the parent) escalate.
