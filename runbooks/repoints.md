@@ -104,6 +104,16 @@ If the requester is the plugin's author, point at claiming.
 
 - filter_fontawesome (camp-index#149): the evidence-picture standard
   for requested repoints, executed with refresh-metrics after.
+- local_geniai (camp-index#193): directory-era publication overriding
+  the current listing holder without a notice window. Two unrelated
+  plugins declared the same component; the directory's pluglist mapped
+  the name to the longer-published one, and per NAMESPACE.md that
+  decided it immediately (the admindashboard notice-and-window shape
+  is for collisions with no directory history on either side). The
+  displaced party gets a courtesy notice after the fact, with a rename
+  invitation and an appeal path, and the full reasoning is recorded on
+  the enacting PR. When a repoint rides inside a claim PR like this,
+  the determination is still a registry act: record it as one.
 - logstore_xapi: the months-invisible rename that motivated canonical
   URL checking in enrich.
 - local_mail: canonical repository shadowed by a copy listing; fixed
