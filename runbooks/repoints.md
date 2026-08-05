@@ -121,6 +121,14 @@ If the requester is the plugin's author, point at claiming.
 - Open LMS cluster (shared-history review): fourteen in-house platform
   variants of community plugins, verdict KEEP; shared history is not
   itself repoint evidence.
+- Maintenance-continuation KEEP (profilefield_multiselect,
+  block_quickset; shared-history review, camp-tools#14): when a tier 0
+  listing points at an actively maintained continuation and the
+  directory-named origin has been dead for years, the living
+  repository keeps the listing. Directory evidence overrides the
+  current holder in identity disputes (local_geniai), not in
+  maintenance continuations; the origin author can always claim or
+  request a repoint with evidence.
 - webservice_restful (#52): when the parties agree the name moves, the
   clean mechanism was removal plus re-seed rather than a repoint;
   consider it for full handovers.
