@@ -541,3 +541,58 @@ The window this closes was real: GitHub reuses names immediately, and
 the registry's rename detection runs on a rolling cadence, not at
 publish time. PyPI's trusted publishing hardened against the same
 resurrection class.
+
+## D27: Merges are earned by verification; humans merge only judgment
+
+The registry's original merge rule keyed on authorship: machine-
+authored release PRs needed one admin, human-authored PRs a
+non-author admin. That line was always a proxy. What the click
+actually certified was never who wrote the change but whether its
+assertion had been established — and for a release PR, everything
+the merge could check, the checks had already checked: the OIDC
+token proved the release came from CI of the listed repository
+(D26), verification rebuilt the tag and compared hashes, and the
+record itself was machine-written with allowlisted keys. The admin
+click verified nothing; it was custody ritual plus latency. The
+rules shipped (camp-index#210):
+
+- Pull requests whose assertions the verification checks fully
+  establish merge automatically as a registry act, by the automation
+  app, pinned to the exact verified head SHA. A commit landing after
+  verification fails the merge harmlessly; the next verification run
+  retries. Two classes qualify:
+- Releases: opened by the publisher service with every commit
+  committed by it (commit authors remain the maintainers, per the
+  attribution rule), diff proven a pure release append on one
+  existing entry, with the tier 1 to 2 carry on a first release.
+- Claims: one existing entry raised from tier 0 to 1, adding
+  maintainers and contact and label data and nothing else, where
+  proof of repository control is public and mechanical — the PR
+  author owns the user-owned source repository or is a public member
+  of the owning organization — and the component carries no
+  name-collision record. Repository control is the substance of a
+  claim (it is the same fact the publish flow trusts, D26), so a
+  public authorship match establishes it without judgment.
+- Everything else falls through untouched to a human: source changes
+  (a repoint is the identity checkpoint, D26), summary edits,
+  organizations with private membership, collisions (NAMESPACE.md),
+  non-GitHub sources until the OIDC claim proof composes in. The
+  automation never blocks a merge and never closes a PR; it only
+  performs eligible ones.
+- The admin brake is mechanical and total: a `hold` label or draft
+  state stops the automation for that PR, and any admin may close or
+  revert anything. Auto-merged PRs carry an audit label. New
+  eligibility classes are admitted only through the public design
+  record, never by a quiet workflow edit — and the automation's
+  token cannot modify workflow files, so it cannot widen its own
+  rules.
+- Eligibility is re-derived by the merge workflow from the git data
+  and platform APIs, independently of the services that authored the
+  PR. The publisher writing an honest diff is expected; the merge
+  not trusting it keeps the two failure domains separate.
+
+Every major registry publishes releases with no registry-side human
+per release; camp's per-release verification is stronger than most,
+and the human click was our addition, not our safeguard. What
+remains human is exactly what should be: the judgment residue the
+runbooks exist for, where two eyes see what no check can.
