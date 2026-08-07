@@ -85,11 +85,15 @@ The registry's maintainers: merge rights on the index, and the
 authority the runbooks route upward.
 
 - **Merges**: any admin may merge a pull request that passed
-  verification. Machine-authored pull requests (release publications
-  from the pipeline) need no second human; the verification checks
-  are the review, and an admin may merge them even for a plugin they
-  maintain. Human-authored pull requests are merged by an admin who
-  did not author them.
+  verification. The dividing line is what the checks establish, not
+  who authored the change. Pull requests whose assertions the
+  verification checks fully establish (release publications from the
+  pipeline today; further classes only as the public design record
+  admits them, camp-index#210) are reviewed by the checks alone and
+  may merge automatically as a registry act; an admin may also merge
+  them by hand, even for a plugin they maintain, and any admin may
+  hold, close, or revert one. Pull requests that require human
+  judgment are merged by an admin who did not author them.
 - **Reserved decisions**: namespace determinations and removals for
   cause. Each is recorded in writing with the concurrence of two
   admins before it is enacted, and the enacting change is merged by
