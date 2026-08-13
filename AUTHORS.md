@@ -234,6 +234,10 @@ badges:
 The registry fetches the data at publish time and renders the chip
 itself, so visitors never load third-party images (RFC §4.6).
 
+## Claim a utility listing
+
+Utility listings (the tools under `/utility/`) are curated by the registry until their maintainer claims them. To claim yours, open `utilities/<slug>.yml` in the index with the GitHub web editor, add yourself under `maintainers:` (your GitHub handle) and a `claimed:` line with today's date, and submit the pull request from the account that controls the repository the listing points to — that authorship is the proof, exactly as with plugin claims. A claimed listing shows you as its maintainer, and the descriptive fields (summary, homepage, install methods, labels) become yours to keep current by PR. There are no releases to publish: utilities are pointers, and the release shown on your page is read from your own distribution channel automatically.
+
 ## Afterwards — all optional
 
 - **Listing updates:** edit `.camp/listing.yml`, commit; ingested and
