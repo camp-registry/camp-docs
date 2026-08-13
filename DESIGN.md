@@ -596,3 +596,11 @@ per release; camp's per-release verification is stronger than most,
 and the human click was our addition, not our safeguard. What
 remains human is exactly what should be: the judgment residue the
 runbooks exist for, where two eyes see what no check can.
+
+## D28: Utilities are pointers; monitorability is the fence
+
+**Decision.** Ecosystem tools that are not plugins (camp-docs#4) are listed pointer-only: no tiers, no release ledger, no artifacts, no verification claims. They render as first-class rows in browse/search via a sibling `utilities` key in index.json (the `plugins` array is unchanged for consumers), with tier and Moodle-version filters excluding them by semantics. Admission's operative test is machine-monitorability: the tool's canonical distribution channel must be a source host enrich already monitors or a scheme implemented in camp-tools' release-channel adapter table (first adapter: Open VSX). The table is the fence; widening it is a reviewed code change, not a per-vendor judgment.
+
+**Why monitorability rather than open source.** Pointer-only listings need observability, not source access: if the registry displays a release, a machine must notice when it goes stale. Open source was a proxy for that; the adapter table is the thing itself. It also disposes of adjacent questions mechanically: hosted services distribute nothing and fail; closed-source tools with a monitorable channel pass, carrying full disclosure rendering. The claims anchor (source-repo-id) still requires a public repository.
+
+**Costs accepted.** Every future browse facet or sort owes utilities an explicit answer (the kind flag makes the default exclusion cheap), and the closed-source case's release row depends on the adapter existing before the listing does.

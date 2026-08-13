@@ -132,6 +132,16 @@ Administrators can filter searches by label ("show only fully-free plugins"), an
 
 This is disclosure, not gatekeeping: freemium and service-backed plugins are welcome; the requirement is simply that administrators know what they are installing before they install it.
 
+### 4.8 Utilities: pointer listings for ecosystem tools
+
+The registry's subject is installable Moodle plugins, and the guarantees in §4.2–§4.5 are built on plugin structure: a frankenstyle component, a version.php, a rebuildable ZIP. A small class of established community tools falls outside that structure while serving the same ecosystem — command-line shells, CI harnesses, development environments. The old plugins directory listed these under an "Other" category.
+
+The registry lists such tools as **utilities**: pointer-only entries under `utilities/<slug>.yml`, rendered alongside plugins in browse and search. A utility entry records the tool's canonical home and basic facts. Nothing is hosted, rebuilt, verified, or archived; releases shown on a utility page are upstream facts refreshed by the registry's metadata sweep and are labeled as such. Utilities carry no trust tiers — admission is curated and consent-based, and the only status distinction is whether the maintainer has claimed the entry (same repository-control proof as plugin claims).
+
+Admission requires all of: (1) a public repository anchoring claims and issue reporting; (2) a distribution channel the registry's tooling monitors through a public API — the adapter list in camp-tools is the operative fence, and extending it is a registry decision made in code; (3) an established community footprint; (4) for commercial tools, a free tier that makes the tool genuinely usable without payment. Open source is not required; closed-source utilities render with full disclosure (license, closed-source marker, the repository row labeled as a project rather than source repository, and no repository metrics). Hosted services distribute nothing and therefore never qualify. Tools with frankenstyle components are plugins, whatever else they are, and are listed as plugins.
+
+Utility slugs are a namespace of their own, first-come, disputes per NAMESPACE.md; they cannot collide with component names structurally, because the trees and URL spaces are disjoint.
+
 ## 5. Security reporting and advisories (third-party plugins only)
 
 This section describes a capability the official directory has never offered: an end-to-end pipeline from private vulnerability report to automatic administrator warning. Reports concerning Moodle core are always redirected to Moodle HQ's existing security process; this project's scope is strictly third-party plugins.

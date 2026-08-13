@@ -102,6 +102,10 @@ the renamed plugin normally. The resolution stays linked from the
 `name-dispute` issue. Decisions can be revisited if made on facts that
 turn out to be wrong.
 
+## Utility slugs
+
+Utility listings (RFC §4.8) name themselves with plain lowercase slugs (`moosh`, `moodle-docker`) in a namespace separate from frankenstyle components: the trees (`utilities/` vs `plugins/`), page URLs (`/utility/` vs `/plugin/`), and keys never intersect, so no future Moodle plugin type can collide with a utility slug structurally. Within the utility namespace, first established wins, with the same dispute procedure as components. A slug should be the name the tool's own community uses for it; the registry does not arbitrate between a tool and an unrelated project elsewhere that shares its name, only between camp listings.
+
 ## Squatting
 
 A component name may not be held by anything that is not a working
