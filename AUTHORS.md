@@ -77,7 +77,39 @@ ODbL with advisories under CC BY 4.0; see LICENSE-DATA and
 CONTRIBUTING.md in camp-index. Your plugin's own code and listing
 content stay under your plugin's license, always.
 
-## Step 2 — One-time repository setup (~5 minutes)
+### Claiming as an organization
+
+If your organization maintains many listed plugins and the maintainer
+and security-contact details are identical across them, you don't need
+a PR per plugin — or any PR at all. Publish a repository named
+`camp-claim` in your organization with a `camp-claim.yml` at its root:
+
+```yaml
+maintainers:
+- github: your-account          # the accounts that may publish releases
+security-contact: https://github.com/your-org/some-repo/security
+labels: [fully-free]            # default for every plugin
+overrides:                      # optional, per-component exceptions
+  local_example:
+    labels: [external-account, paid-service]
+exclude: [local_notours]        # optional, components not to claim
+```
+
+Then file an **Organization claim request** issue on camp-index. The
+registry runs a sweep that claims every listed entry whose source
+repository belongs to your organization, writing exactly what
+individual claim PRs write. Control of the organization's repositories
+is the authorization — the same trust root release publishing uses.
+Entries someone already claimed individually are never overwritten;
+they're reported back on the request for reconciliation.
+
+That first request is the only one you'll file. Afterwards the registry
+watches your manifest: edit it (new maintainer, changed contact, label
+fix) and the change reaches all your claimed entries within a day. The
+same applies to plugins of yours that get listed later — they're
+claimed automatically on the next sweep. The watch only ever updates
+entries your manifest claimed; removing an entry from your claim (or
+un-claiming) always involves a human, so file an issue for that.
 
 Nothing in this step requires a local toolchain: everything the
 pipeline runs happens on your host's CI servers, so your own operating
