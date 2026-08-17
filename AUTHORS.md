@@ -137,15 +137,39 @@ first as the lead image. From Tier 1 up this manifest in *your*
 repository is your listing content (RFC §4.1): you update it with
 ordinary commits, and it is pinned at each release.
 
-**2. Copy the release workflow.** On GitHub, copy
+**2. Add the release workflow.** On GitHub, the recommended setup is a
+six-line caller of the maintained
+[reusable workflow](https://github.com/camp-registry/camp-workflows) —
+create `.github/workflows/camp-release.yml` in your plugin repo:
+
+```yaml
+name: Publish release to camp
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  camp:
+    uses: camp-registry/camp-workflows/.github/workflows/release.yml@v1
+```
+
+Fixes and tooling updates then reach you automatically — nothing to
+re-copy, ever. Organizations whose plugins already inherit a shared
+workflow can add that same `uses:` job to the shared workflow instead,
+covering every plugin with no per-repository changes.
+
+Prefer a self-contained copy? The original template
 [`templates/author-release.yml`](https://github.com/camp-registry/camp-index/blob/main/templates/author-release.yml)
-from the index repository to `.github/workflows/camp-release.yml` in
-your plugin repo. On gitlab.com, copy
+remains supported — copy it to the same path. On gitlab.com, copy
 [`templates/author-release-gitlab.yml`](https://github.com/camp-registry/camp-index/blob/main/templates/author-release-gitlab.yml)
 into your `.gitlab-ci.yml` instead; GitLab-hosted plugins need no
-GitHub account at all. No values to edit either way: the component
-name and supported-Moodle range are read from your version.php at the
-tag. The env overrides at the top exist for the rare plugin whose
+GitHub account at all. No values to edit any way you choose: the
+component name and supported-Moodle range are read from your
+version.php at the tag. The overrides (workflow inputs on the reusable
+workflow, env values on the templates) exist for the rare plugin whose
 version.php can't say what it means.
 
 *How publishing is authorized:* when your workflow runs at a tag, your
