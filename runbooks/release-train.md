@@ -40,6 +40,10 @@ nothing on main is live just because it merged.
    templates gain version references (the template freshness checks
    carry the literal too), so trust the grep, not a remembered number.
    Commit and push.
+   THE SWEEP NOW CROSSES REPOS: camp-workflows (the reusable release
+   workflow) pins camp-tools too — grep there as well, bump, and cut
+   a new vX.Y.Z tag + move the v1 major tag in that repository, or
+   every reusable-workflow caller keeps installing the old camp-tools.
 4. Publish: a push that touches plugins/ or advisories/ triggers it;
    a pins-only, templates-only or docs-only push does not (the paths
    filter), so dispatch publish.yml manually in that case.
