@@ -9,6 +9,8 @@ single company. Start here:
   [Discussions](https://github.com/camp-registry/camp-docs/discussions)
 - **[AUTHORS.md](AUTHORS.md)** — the plugin developer's path from claimed
   listing to verified releases (steady state: push a git tag)
+- **[INSTALLING.md](INSTALLING.md)** — the site administrator's guide:
+  Composer setup, the tool_camp client, ZIP downloads
 - **[DESIGN.md](DESIGN.md)** — the running log of implementation decisions
   (D1–D21) and their rationale
 - **[MIRRORING.md](MIRRORING.md)** — how to run a mirror
