@@ -52,10 +52,12 @@ nothing on main is live just because it merged.
 
 ## Record
 
-1. GitHub Release on the tag: notes drafted from the commits and the
-   issues closed since the previous tag, edited for reading, published
-   with `gh release create`. camp-tools and moodle-tool_camp carry
-   releases; camp-index and camp-docs do not (continuous data and
-   documentation).
+1. GitHub Release on the tag: camp-tools creates it automatically when
+   the tag is pushed (`.github/workflows/release.yml`; notes are the
+   commit messages since the previous tag, bump and merge commits
+   dropped). Read it over and edit if the commits under-explain;
+   moodle-tool_camp releases are still made by hand with `gh release
+   create`. camp-index and camp-docs do not carry releases (continuous
+   data and documentation).
 2. Close the shipped issues with evidence: what shipped, where it is
    verified, and any follow-ups split out.
