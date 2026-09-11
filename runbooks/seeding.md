@@ -106,17 +106,26 @@ invites a fresh request after the push.
 ## Fork-flagged repositories
 
 Discovery excludes GitHub-flagged forks by design (a noise filter
-against listing thousands of unmodified copies), so a targeted scan
-cannot seed one, and the seed-request path will hit this for authors
-whose plugin began life as a fork. The exclusion is a discovery
-heuristic, not an admission rule. A fork qualifies for a hand-seeded
-registry entry when the picture shows a distinct plugin rather than a
-copy: it declares its own component name, it has meaningfully diverged
-from the parent, it is maintained, and ideally the old directory
-listed the component to it. Hand-seeding means writing the entry with
-data observed from the platform API at seed time, exactly as the
-scanner records it, never copying author-supplied values; the commit
-documents the evidence. Precedent: block_rate (camp-index#195), a
-diverged, directory-listed fork of moodleou's block_rate_course.
-Weaker pictures (undiverged forks, no directory history, component
-unchanged from the parent) escalate.
+against listing thousands of unmodified copies), so the sweep never
+sees one, and the seed-request path will hit this for authors whose
+plugin began life as a fork. The exclusion is a discovery heuristic,
+not an admission rule, and it lives in the search query alone: GitHub
+repository search omits forks unless the query says otherwise. A
+targeted scan seeds a fork like any other repository when the query
+carries the qualifier:
+
+    camp scan . --query "repo:OWNER/NAME fork:true" --recheck-days 0
+
+The scanner's own gates (version.php, license, name) still apply, so
+no entry is hand-written (camp-index#318: a documented successor
+repository, refused for its license, not for the fork flag). The
+admission judgment is what the operator brings: a fork qualifies when
+the picture shows a distinct plugin or a documented change of home
+rather than a copy. It declares its own component name or the parent
+itself points to it as the successor, it has meaningfully diverged or
+carries the ongoing releases, it is maintained, and ideally the old
+directory listed the component to it. The commit documents the
+evidence. Precedent: block_rate (camp-index#195), a diverged,
+directory-listed fork of moodleou's block_rate_course. Weaker pictures
+(undiverged forks, no directory history, component unchanged from the
+parent with no successor pointer) escalate.
