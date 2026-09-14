@@ -305,19 +305,32 @@ Utility listings (the tools under `/utility/`) are curated by the registry until
   `.camp/listing.yml` — which is yours alone: the registry pins its
   bytes and never rewrites it.
 - **Backfilling older releases:** the ledger accepts releases in any
-  order — a version older than your latest lists just the same. Run your
+  order; a version older than your latest lists just the same. Run your
   release workflow at the existing tag (`gh workflow run
-  camp-release.yml --ref v1.1.0`; if your copy of the template predates
-  the `workflow_dispatch` trigger, add it) — never re-tag. Worth doing
+  camp-release.yml --ref v1.1.0`); never re-tag. The workflow runs from
+  the tagged commit, so that commit must already contain the workflow
+  file, `.camp/listing.yml` and your `.gitattributes` rules. For tags
+  that predate them, build the records yourself: install camp-tools
+  (`pip install "git+https://github.com/camp-registry/camp-tools"`),
+  clone camp-index, run `camp release plugins/<type>/<component>.yml
+  v1.1.0 --source /path/to/your/plugin/clone` once per tag, and open
+  one pull request with all of them from the account that controls
+  your repository. Hand-authored release records never auto-merge: camp
+  CI rebuilds and verifies every record from the public tag, then a
+  registry admin merges on green
+  ([camp-index#325](https://github.com/camp-registry/camp-index/pull/325)
+  is a worked example, 15 tags in one PR). Worth doing
   for the newest release of each Moodle branch sites still run; every
   tag you ever pushed is history, not coverage. Your plugin page sorts
   this out automatically: it features the newest release per branch
   (the same set the install picker offers) and folds everything older
-  behind a disclosure — so deeper backfill is welcome, just invisible
-  by default. If a backfilled version
+  behind a disclosure, so deeper backfill is welcome, just invisible
+  by default. Tags from before your `.gitattributes` rules ship whatever
+  the tag contains (CI configs, changelogs); records are immutable, so
+  that stays as verified. If a backfilled version
   had a known vulnerability, publish the advisory with it (RFC §5.3) so
   the version table warns instead of silently serving it. One honest
-  limit: pinning happens at publication — the ledger proves the artifact
+  limit: pinning happens at publication; the ledger proves the artifact
   matches your tag from that day forward, not that the tag never moved
   in the years before. In the tokenless flow, releases published while
   an earlier one is still awaiting merge simply append to the same open
