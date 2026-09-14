@@ -86,7 +86,7 @@ a PR per plugin — or any PR at all. Publish a repository named
 
 ```yaml
 maintainers:
-- github: your-account          # the accounts that may publish releases
+- github: your-account          # the people accountable, shown on each page
 security-contact: https://github.com/your-org/some-repo/security
 labels: [fully-free]            # default for every plugin
 overrides:                      # optional, per-component exceptions
