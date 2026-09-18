@@ -40,7 +40,7 @@ Generated 8 September 2026 in memory on the registry host; private halves exist 
 5. The host attached the signatures (`camp tuf root assemble`); each verified against its key and the threshold was met. The result was shown to all participants.
 6. The signed root was committed to camp-index and this record published.
 
-Call: Google Meet, 13:00–13:50 UTC, recorded with consent. Participants: the four stewards. Host: David Pesce.
+Call: Google Meet, 13:00–13:50 UTC, not recorded. Participants: the four stewards. Host: David Pesce.
 
 ## Next dates
 
