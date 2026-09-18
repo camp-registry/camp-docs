@@ -46,9 +46,3 @@ Call: Google Meet, 13:00–13:50 UTC, not recorded. Participants: the four stewa
 
 - Annual re-sign: by 2027-08-18; 15-minute call, same procedure from step 2 with a new expiry.
 - Fifth-steward rotation: when seated; same procedure with `--previous tuf/1.root.json`, signed by at least three current keys.
-
-## Anomalies
-
-- One steward's public key was pasted into chat with the chat's sender line above it; the host removed that line before the build. The key itself was unchanged.
-- One steward set the PIN on their token during the call, before signing, rather than in the prep step.
-- All four signatures verified on the first attempt; nothing was re-sent.
