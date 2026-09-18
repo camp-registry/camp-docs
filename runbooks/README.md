@@ -21,6 +21,11 @@ the lead, usually because a precedent was expensive to establish.
   claim and its publishing credential.
 - **release-train.md** — how a camp-tools change reaches production:
   tags, pins, packaging checks, publish, release notes.
+- **succession.md** — root key custody: who holds what, the annual
+  re-sign, steward rotation, online-key compromise, and re-bootstrap
+  when the threshold cannot be met.
+- **root-steward-handbook.md** — the instructions sent to root
+  stewards: preparing a hardware key, generating, hashing, signing.
 
 The tooling is built so that policy lives in commands, not in operator
 memory: when a runbook and the CLI disagree, that is a bug in one of
