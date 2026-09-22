@@ -5,8 +5,7 @@ the RFC. Newest last.
 
 ## D1: Python for registry tooling, moodle-plugin-ci for plugin checks
 
-Plugin-quality checks reuse `moodlehq/moodle-plugin-ci` unchanged — it is
-what authors already run, so registry results match author CI results.
+Plugin-quality checks reuse `moodlehq/moodle-plugin-ci`, so registry results match what authors already run. The registry runs its static subset (phplint, phpcs, validate, savepoints; RFC §4.2) against a plugin installed with `--no-init`: the test-suite database moodle-plugin-ci would build serves PHPUnit and Behat, which are the author's CI's job. Site installation is exercised separately as a warn-only check on every release (camp-index#366): a plugin that cannot install on a stock site, for a required core patch or a broken install hook, is reported, not refused, because installability is not what source verification claims.
 
 Registry tooling (validation, deterministic builds, verification, Composer
 metadata, later signing) is Python. The deciding factor is RFC §4.3:
