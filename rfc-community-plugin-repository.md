@@ -126,6 +126,7 @@ Every plugin must declare a set of standardized disclosure labels, treated exact
 - **`freemium`**: free to install, but some features are paywalled or require a paid unlock.
 - **`paid-service`**: requires a subscription, API key, or account with an external commercial service to function (in full or in part).
 - **`external-account`**: requires a third-party account even if free (relevant for privacy and procurement review).
+- **`requires-core-patch`**: needs modifications to Moodle core (patches applied outside the plugin) to function; the listing should say which and where to get them.
 - **`donation-supported`** and **`commercial-support-available`**: optional, author-promotional.
 
 Administrators can filter searches by label ("show only fully-free plugins"), and institutions can encode label policies in procurement rules. Labels are validated for presence by CI at submission; automated heuristics (e.g., detecting API-key or license-key settings in the code) flag likely misdeclarations for human attention, and Tier 3 review verifies labels as part of promotion. Deliberate mislabeling is treated as a trust violation: correction, and delisting for repeat offenses.

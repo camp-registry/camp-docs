@@ -49,7 +49,8 @@ automatically. You're adding:
   vulnerability*; GitLab has the equivalent), else an email you actually
   read (RFC §5.1);
 - your disclosure labels (RFC §4.7): `fully-free`, `freemium`,
-  `paid-service`, `external-account`, and/or the promotional
+  `paid-service`, `external-account`, `requires-core-patch` (the plugin
+  needs patches to Moodle core to work), and/or the promotional
   `donation-supported` / `commercial-support-available`. Labels inform,
   they never disqualify — the requirement is that administrators know what
   they're installing;
