@@ -162,6 +162,18 @@ re-copy, ever. Organizations whose plugins already inherit a shared
 workflow can add that same `uses:` job to the shared workflow instead,
 covering every plugin with no per-repository changes.
 
+If your policy forbids calling a workflow at a movable tag, pin a
+commit instead: `release.yml@<full-commit-sha> # v1`. Dependabot's
+`github-actions` ecosystem proposes bumps for reusable workflows. A
+pinned caller receives fixes only when bumped, so expect the occasional
+bump before a release goes through. Either way the caller holds no
+secrets: it obtains a short-lived OIDC token for the publish service,
+and the index rebuilds every release from your public tag before
+anything is published, so the workflow cannot publish code that is not
+in your repository. On our side, the `v1` tag is moved only by the
+release train and is protected against deletion or movement by anyone
+but the repository's admins.
+
 Prefer a self-contained copy? The original template
 [`templates/author-release.yml`](https://github.com/camp-registry/camp-index/blob/main/templates/author-release.yml)
 remains supported — copy it to the same path. On gitlab.com, copy
