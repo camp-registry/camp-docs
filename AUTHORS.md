@@ -141,7 +141,12 @@ ordinary commits, and it is pinned at each release.
 **2. Add the release workflow.** On GitHub, the recommended setup is a
 six-line caller of the maintained
 [reusable workflow](https://github.com/camp-registry/camp-workflows) —
-create `.github/workflows/camp-release.yml` in your plugin repo:
+create `.github/workflows/camp-release.yml` in your plugin repo. The
+canonical copy is
+[`templates/camp-release.yml`](https://github.com/camp-registry/camp-index/blob/main/templates/camp-release.yml)
+in camp-index, also served at
+`https://camp-registry.org/templates/camp-release.yml` for tools that
+generate plugin scaffolding:
 
 ```yaml
 name: Publish release to camp
