@@ -16,7 +16,9 @@ Clients verify content, not servers:
   verification lands, a mirror cannot alter metadata either.
 - The worst a malicious or compromised mirror can do is serve *stale* or
   *missing* files — never tampered ones. TUF timestamp metadata expires
-  daily, which bounds how stale "stale" can be before clients notice.
+  after 14 days (snapshot 30, targets 90; DESIGN.md D30), which bounds how
+  stale "stale" can be before clients notice. The registry re-signs twice
+  a day, so a mirror syncing hourly is never more than a few hours behind.
 
 ## What you need
 
@@ -34,7 +36,7 @@ The published tree has two parts since the artifact archive landed
 append-only archive bucket (S3-compatible, public read).
 
 ```
-# hourly is plenty; timestamp metadata is valid for a day
+# hourly is plenty; timestamp metadata is re-signed twice a day (14-day window)
 17 * * * *  wget -q --mirror --no-parent -P /srv/camp https://camp-registry.org/
 43 * * * *  rclone sync :s3,provider=Other,endpoint=<b2-s3-endpoint>:camp-artifacts \
                 /srv/camp/artifacts --checksum

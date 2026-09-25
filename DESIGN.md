@@ -611,3 +611,40 @@ runbooks exist for, where two eyes see what no check can.
 **Why translation, not policy.** The dependency data is the author's own declaration, which Moodle already enforces at upgrade; camp rewrites it into Composer's grammar the same way it rewrites versions, licences and branch support (D6, D7). The author changes the outcome by editing version.php. The parent requirement is the one inference camp adds: Moodle derives a subplugin's parent from its type, and camp states that derivation as a requirement. Composer installs in dependency order (moodle/composer-installer v1.2.2) and refuses early what Moodle would refuse later. HQ has not defined a mapping from version.php dependencies to Composer; this is camp's translation, offered on moodle/composer-installer#4, and it yields to an HQ-defined convention if one appears. That is what the switch is for.
 
 **Costs accepted.** On a Composer-managed site, Composer becomes the manager of a dependency it did not previously know about, replacing a hand-installed copy in place. A dependency's package rename (D6, first-maintainer change) propagates to every dependent's next `composer update`, which removes and reinstalls the plugin directory. A declared minimum no served version meets produces no requirement, so the install succeeds and Moodle's upgrade refuses, as today.
+
+## D30: Phase-2 signing covers what installs, with windows sized to the operator
+
+Decided 2026-09-25, after asking the community (Matrix) and checking what apt,
+dnf, Packagist and Notary do. Every publish signs the tree with the online keys
+the steward root lists (camp-tools#47 phase 2):
+
+- **Targets are what a client installs, not the website.** The site's
+  machine-readable files (`packages.json`, `security-advisories.json`,
+  `index.json`), hashed at publish, plus every ledger release installation
+  metadata serves — exactly the set `camp composer` emits (tier 2 or higher,
+  not delisted, not revoked) — named by its path under the artifact host.
+  The hash is the ledger's, the value verification produced by rebuilding
+  the tag; the byte length comes from the archive audit's HEAD of the stored
+  object. The 6,000 browse pages are not targets: nothing installs them.
+- **Windows: timestamp 14 days, snapshot 30, targets 90, root as set at the
+  ceremony.** The timestamp is both the freeze-attack bound and the
+  availability budget. Publish runs twice daily, so the window is ~28 missed
+  runs of slack; the dead-man's switch fires ~30 h after a missed run, which
+  leaves ~12 days to repair before verifying clients go dark. Debian's rolling
+  suites use 7 days, Notary shipped 14, dnf and Packagist enforce nothing; a
+  shorter window buys little while the pipeline is young and costs a weekend
+  outage. The windows are parameters of `camp tuf sign` set from the publish
+  workflow, so tightening is one commit in camp-index; shortening takes full
+  effect only after the last long-window timestamp expires. Constraint
+  enforced: timestamp <= snapshot <= targets.
+- **Layout follows the root's `consistent_snapshot`.** Targets and snapshot are
+  served as `<version>.<role>.json` beside unversioned copies, root as
+  `<version>.root.json`, timestamp unversioned. ZIPs on the artifact host are
+  not hash-prefixed (they are immutable, compliance-locked objects), so the
+  phase-3 client disables target hash prefixes. Version numbers continue
+  across runs: publish fetches the live metadata before signing.
+- **Expired metadata on the client (phase 3, recorded here so it is not
+  re-decided):** follow apt. Keep working from the last verified metadata, say
+  loudly that it is stale, refuse only new metadata that fails verification.
+  Mirrors carry the metadata unchanged; a client may be pointed at several
+  and take the freshest valid copy.
