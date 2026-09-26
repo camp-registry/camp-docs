@@ -353,7 +353,11 @@ Utility listings (the tools under `/utility/`) are curated by the registry until
   in the years before. In the tokenless flow, releases published while
   an earlier one is still awaiting merge simply append to the same open
   PR (one rolling release PR per plugin), so backfilling several
-  versions in a row just works. In the PAT flow, release one version at
+  versions in a row just works. If a queued release fails verification,
+  the next tag you publish resets that PR to carry the new release
+  alone, and a comment on the PR lists what was dropped; a failed tag
+  cannot pass on a retry, so fix the source and tag a new version
+  rather than waiting. In the PAT flow, release one version at
   a time: two release PRs open at once edit the same entry lines, so
   the second conflicts; if that happens, re-run the workflow at the
   affected tag and its PR updates in place.

@@ -142,7 +142,9 @@ publish.camp-registry.org):
    D26 for the identity rules). It appends exactly one release record to
    the entry on a rolling `release-request/<component>` branch based on
    current main (a second release appends to the open PR — the fix
-   promised on camp-index#13), carries the tier 1 → 2 transition on a
+   promised on camp-index#13; when that PR's verification has failed,
+   the branch is reset to main first and the PR carries the new record
+   alone, camp-publisher#4), carries the tier 1 → 2 transition on a
    first release, and opens or updates the PR. The maintainer is the git
    author of the release commit; the App is the committer, so the
    release act stays attributed to its author.
