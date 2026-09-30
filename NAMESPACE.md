@@ -100,7 +100,12 @@ experiment does not outweigh a maintained plugin with users).
 **Aftermath.** The losing party renames; the registry assists and lists
 the renamed plugin normally. The resolution stays linked from the
 `name-dispute` issue. Decisions can be revisited if made on facts that
-turn out to be wrong.
+turn out to be wrong. The verdict is also recorded on the colliding
+repository's scan-ledger record (`camp resolve-collision`, pointing at
+the issue or pull request that holds the reasoning), so the claim path
+stops routing that component to a human. A collision whose other party
+turns out to be a copy or re-upload of the listed plugin is recorded the
+same way, as `copy-of-listed`, without a dispute.
 
 ## Utility slugs
 
