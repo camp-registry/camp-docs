@@ -32,6 +32,11 @@ want is already listed by a different project, don't publish under it:
 [open an issue](https://github.com/camp-registry/camp-index/issues) and
 the collision is resolved per
 [NAMESPACE.md](https://github.com/camp-registry/camp-docs/blob/main/NAMESPACE.md).
+Name the repository after the component too (`moodle-mod_example` is the
+convention): discovery only lists a repository whose name carries the
+component it declares, and a mismatch is rejected like a missing licence,
+with the fix recorded. If your plugin lives in a repository you cannot
+rename, a seed request lists it on your word.
 
 ## Step 1 — Claim the listing (Tier 0 → Tier 1)
 

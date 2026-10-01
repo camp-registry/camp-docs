@@ -27,6 +27,10 @@ availability check.
 1. **Discovery is not reservation.** A Tier 0 listing exists because the
    scanner found a public repository. It records that a repo uses a
    name; it does not grant the name. Crawl order allocates nothing.
+   Discovery also lists only repositories whose own name carries the
+   component they declare; a mismatch is rejected with the fix recorded
+   (rename, or a seed request as the human sign-off), never parked for
+   someone to judge later (camp-tools#60).
    (Precedent: a seeded listing that had raced to a fork was later
    repointed to the plugin's canonical repository.)
 

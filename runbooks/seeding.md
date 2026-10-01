@@ -63,8 +63,17 @@ Read the outcome the scanner records:
   qualify. Reply with the specific reason and what fixes it (add a
   license file or GPL header; put version.php at the repo root); the
   request can be re-run after they push. Do not override.
-- **needs-review:** the repo name does not correspond to the declared
-  component. A human decides (RFC §8); escalate with the details.
+- **name-mismatch:** the repository name does not carry the declared
+  component, so the sweep rejected it like any other gate (camp-tools#60).
+  The seed request is the human sign-off RFC §8 keeps: when the requester
+  controls the repository and it is a working plugin, re-run with the gate
+  lifted for this one repository:
+
+      camp scan . --query "repo:OWNER/NAME" --recheck-days 0 --allow-mismatch
+
+  Otherwise reply with the fix: rename the repository to include the
+  component name (GitHub keeps the old URL redirecting; the next sweep
+  lists the new name on its own).
 - **exists / copy / name-collision:** the component is already held.
   This is not a seed; see step 2.
 
@@ -80,7 +89,7 @@ invites a fresh request after the push.
 
 ## Escalate
 
-- needs-review outcomes (name/component mismatch).
+- needs-review outcomes (unknown plugin-type families, shadowing).
 - Any already-listed component (repoint or dispute in disguise).
 - An opted-out marker for the repository when the requester is not the
   author who opted out.
