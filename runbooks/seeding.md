@@ -54,7 +54,12 @@ From a current camp-index checkout, with camp-tools on PYTHONPATH:
 `--recheck-days 0` forces re-evaluation of a repository the ledger has
 seen before (the common case for requests: the sweep already rejected
 it once, usually for a license GitHub could not classify). GitLab
-sources use `camp scan-gitlab` with the project path as the term.
+sources are looked up by project path, not searched:
+
+    camp scan-gitlab . --project GROUP/NAME --recheck-days 0
+
+(`--term` is a project-name search for the sweep; a GROUP/NAME path fed to
+it finds nothing, and a bare name also pulls in every same-named copy.)
 
 Read the outcome the scanner records:
 
