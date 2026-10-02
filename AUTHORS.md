@@ -245,7 +245,14 @@ builds the canonical ZIP with the same code registry CI verifies
 against and computes the release record (version from
 `$plugin->release`, tagged commit, SHA-256, supported branches derived
 from `version.php`, release timestamp), and a PR appending it to your
-entry's ledger opens on the index: the publish service opens it in the
+entry's ledger opens on the index. The record keeps the `$plugin->supported`
+range you declared as well as the branch list it expands to, and the list is
+re-expanded at every publish, so a Moodle version the registry adds later
+shows up on releases that already declared it. The next Moodle joins the
+registry's branch table when upstream reaches beta (its main branch declares
+MATURITY_BETA), labelled as a pre-release until release day; declare it in
+`$plugin->supported` and your release shows it from then on. The PR opens on
+the index: the publish service opens it in the
 tokenless flow, your own workflow does in the PAT flow. Either way the
 PR names you as the author of the release commit.
 
