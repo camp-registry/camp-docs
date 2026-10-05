@@ -35,12 +35,16 @@ nothing on main is live just because it merged.
 
 1. Bump `__version__` in camp/__init__.py; commit as `vX.Y.Z`; push.
 2. Tag `vX.Y.Z`; push the tag.
-3. Pin sweep in camp-index: grep for the previous tag first, then sed
-   every occurrence to the new one. Counts drift as workflows and
-   templates gain version references (the template freshness checks
-   carry the literal too), so trust the grep, not a remembered number.
-   Commit and push.
-   THE SWEEP NOW CROSSES REPOS: camp-workflows (the reusable release
+3. Pin in camp-index: the workflows read `.camp-tools-version` at the
+   repository root, one line holding the tag and the commit it points
+   to (`vX.Y.Z <40-hex sha>`), and install that commit (camp-index#521).
+   Write the new line (`git -C camp-tools rev-parse vX.Y.Z^{commit}`
+   gives the sha), then grep `templates/` for the previous tag and sed
+   those too: the author templates are copied into other repositories
+   and keep a literal. Nothing under `.github/workflows/` changes, so
+   open pull requests stay mergeable by the automation. The pin file
+   is admin-only by ruleset; push it as a registry commit.
+   THE SWEEP STILL CROSSES REPOS: camp-workflows (the reusable release
    workflow) pins camp-tools too — grep there as well, bump, and cut
    a new vX.Y.Z tag + move the v1 major tag in that repository, or
    every reusable-workflow caller keeps installing the old camp-tools.
