@@ -58,7 +58,11 @@ automatically. You're adding:
   needs patches to Moodle core to work), and/or the promotional
   `donation-supported` / `commercial-support-available`. Labels inform,
   they never disqualify — the requirement is that administrators know what
-  they're installing;
+  they're installing. The entry's copy is what a claim records; once you
+  publish releases, the registry shows the labels from the
+  `.camp/listing.yml` at your newest release instead, so a label change
+  reaches your page with your next release and needs no pull request
+  here (camp-tools#73);
 - `tier: 1`.
 
 Leave `releases` exactly as it is (`[]`): the ledger is never hand-edited.
