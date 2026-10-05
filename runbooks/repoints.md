@@ -29,6 +29,18 @@ hijacked; the process below is deliberately conservative.
   (a successor organization keeping its fork is a KEEP, not a
   repoint).
 
+## How requests arrive
+
+Requests from outside the registry come through the "Listing transfer
+request" issue form (label `listing-transfer`): component, both
+repositories, how they relate, the requester's relationship to the
+requested one, the current maintainer's position, evidence links, and
+what is asked (repoint, claim, moved marker). The form collects what
+this runbook verifies; it does not pre-decide anything. A claim pull
+request that also changes `source` is the same request in a different
+vehicle: auto-merge routes it to a human, and the picture below still
+has to be built before merging.
+
 ## The two routine shapes
 
 **1. Rename or transfer of the same repository** (GitHub 301s the old

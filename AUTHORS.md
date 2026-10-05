@@ -403,6 +403,12 @@ Utility listings (the tools under `/utility/`) are curated by the registry until
   which is worth doing so a human stays reachable for it. If you want
   the listing gone instead, the removal request form applies as
   always.
+- **Taking over someone else's plugin,** or moving a listing to your
+  repository: open a "Listing transfer request" issue on camp-index with
+  the evidence (the hand-over agreement, the fork history, where the
+  plugin was published before). A source URL is the listing's identity
+  and its publishing credential, so a change of hands always gets one
+  human look; with the old maintainer's word on record it is quick.
 - **Leaving:** one final PR setting `status: moved` plus `moved-to:` where
   you now publish (RFC §6.3). Your published versions stay archived,
   installable, and advisory-covered; your component name stays yours if
