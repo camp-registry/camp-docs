@@ -102,6 +102,8 @@ labels: [fully-free]            # default for every plugin
 overrides:                      # optional, per-component exceptions
   local_example:
     labels: [external-account, paid-service]
+  format_other:                 # an extra maintainer on one plugin
+    maintainers: [{github: your-account}, {github: co-maintainer}]
 exclude: [local_notours]        # optional, components not to claim
 ```
 

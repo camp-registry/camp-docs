@@ -57,6 +57,11 @@ is claimed by the next day's sweep automatically — by design.
 ## Escalate to the lead
 
 - Conflicts where the manifest contradicts an existing individual claim.
+  Converting one into the org claim is a hand step on the request issue:
+  if the entry needs maintainers the manifest's list lacks, the org adds
+  an `overrides.<component>.maintainers` list first; then set the
+  `org-claim: <org>` stamp on the entry and let the next sweep own the
+  manifest fields.
 - Orgs whose listed sources are split across owners (personal +  org
   repos): the sweep claims only the org-owned subset; whether the rest
   belongs in the manifest's org is a judgment call.
