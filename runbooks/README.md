@@ -21,6 +21,9 @@ the lead, usually because a precedent was expensive to establish.
   claim and its publishing credential.
 - **release-train.md** — how a camp-tools change reaches production:
   tags, pins, packaging checks, publish, release notes.
+- **checks-store.md** — where the per-release code-check summaries live,
+  the scheduled refresh that keeps them current, and how a checker bump
+  drains without recomputing the archive inside a publish.
 - **succession.md** — root key custody: who holds what, the annual
   re-sign, steward rotation, online-key compromise, and re-bootstrap
   when the threshold cannot be met.
