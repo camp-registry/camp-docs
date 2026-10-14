@@ -69,14 +69,19 @@ Composer names are a projection of them. Plugins that already publish to
 Packagist under a different name can add an explicit override field when the
 need first arises (deliberately not speculatively designed now).
 
-## D7: The registry targets Moodle 4.5 LTS through 5.2+
+## D7: The registry targets Moodle 4.5 LTS through the newest release
 
-Confirmed 2026-07-10. The CI matrix pins the endpoints of that range
-(MOODLE_405_STABLE + MOODLE_502_STABLE); intermediate branches are assumed
-covered by the endpoints for the static trust-floor checks. The range's ends
-map to the two integration channels: 4.5 sites use the client plugin
-(RFC §6.2), 5.2+ Composer-managed sites can use the Composer channel
-(RFC §6.1). Note this is the *registry's* tooling target — individual
+Confirmed 2026-07-10 (as "4.5 through 5.2+"); upper end restated 2026-10-14.
+The CI matrix pins the endpoints of that range: MOODLE_405_STABLE and the
+newest released branch (MOODLE_503_STABLE since Moodle 5.3, Oct 2026;
+MOODLE_502_STABLE before that). Intermediate branches are assumed covered
+by the endpoints for the static trust-floor checks. Each Moodle release
+moves the upper pin in camp-index's index-pr workflow, together with the
+PHP minimum and the database service that branch requires; the weekly
+upstream watch files an issue when the pin lags the branch table. The
+range's ends map to the two integration channels: 4.5 sites use the
+client plugin (RFC §6.2), 5.2+ Composer-managed sites can use the Composer
+channel (RFC §6.1). Note this is the *registry's* tooling target — individual
 plugins declare their own `supported-moodle` range in the ledger, which may
 extend below 4.5 (mod_cmi5launch supports 4.3+, for example).
 
