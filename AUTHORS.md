@@ -140,7 +140,10 @@ guard: no fork, no access token, no secrets.
   then `camp scaffold /path/to/your-plugin-repo`, which pre-fills the
   manifest from your version.php and writes `.gitattributes`
   export-ignore defaults that keep `.github/`, dotfiles and other dev
-  clutter out of your distribution ZIPs.
+  clutter out of your distribution ZIPs. `tests/` ships by default, as
+  it does in Moodle core and in moodle.org plugin ZIPs, so sites can run
+  your PHPUnit and Behat tests; add `tests export-ignore` yourself if
+  you would rather leave it out.
 
 Screenshots are raster only (png/jpg/webp, no SVG), each entry a
 repo-relative `path` with an optional `caption`; the registry
