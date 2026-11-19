@@ -382,6 +382,18 @@ Utility listings (the tools under `/utility/`) are curated by the registry until
 - **Security reports** arrive at your declared contact; the coordinated
   disclosure process (RFC §5) handles embargo, advisory publication, and
   automatically warning every affected site.
+- **Fixing a vulnerability:** tell the registry privately through
+  [private vulnerability reporting on camp-index](https://github.com/camp-registry/camp-index/security/advisories/new),
+  ideally before you tag the fix. Give the component, the affected and
+  fixed versions, your severity rating, a short description that is
+  safe to publish at release, whether to revoke the affected versions,
+  and the reporter's credit and any CVE. The registry prepares a
+  `CAMP-YYYY-NNNN` advisory privately and publishes it once the fixed
+  release is live, so `composer audit` and the client plugin warn
+  affected sites the same day; fuller details are added when you
+  disclose them. Never use a public issue or pull request for this.
+  The full checklist is in camp-index's
+  [SECURITY.md](https://github.com/camp-registry/camp-index/blob/main/SECURITY.md).
 - **Tier 3 (human-reviewed):** once the review board exists, request
   promotion — two independent reviewers sign it (RFC §4.4).
 - **Dual-listing** elsewhere (Packagist, the Marketplace, a partner store)
